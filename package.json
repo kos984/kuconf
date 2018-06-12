@@ -1,8 +1,12 @@
 {
-  "name": "KUConf",
+  "name": "kuconf",
   "version": "0.0.1",
   "description": "nodejs node js case insensitive config",
-  "main": "index.js",
+  "main": "dist/Config.js",
+  "repository" : {
+    "type" : "git",
+    "url" : "https://github.com/kos984/kuconf.git"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc"
