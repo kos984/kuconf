@@ -1,0 +1,25 @@
+{
+    "defaultSeverity": "error",
+    "extends": [
+        "tslint:recommended"
+    ],
+    "jsRules": {},
+    "rules": {
+        "arrow-parens": [
+            true,
+            "ban-single-arg-parens"
+        ],
+        "quotemark": [
+            true,
+            "single",
+            "jsx-double"
+        ],
+        "no-unused-variable": true,
+        "object-literal-sort-keys": true,
+        "max-line-length": [true, 160],
+        "no-suspicious-comment": true
+    },
+    "rulesDirectory": [
+        "node_modules/tslint-microsoft-contrib"
+    ]
+}

@@ -1,0 +1,26 @@
+{
+  "name": "KUConf",
+  "version": "0.0.1",
+  "description": "nodejs node js case insensitive config",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc"
+  },
+  "keywords": [
+    "config"
+  ],
+  "author": "kos984@gmail.com",
+  "license": "MIT",
+  "dependencies": {
+    "lodash": "^4.17.10",
+    "validatorjs": "^3.14.2"
+  },
+  "devDependencies": {
+    "@types/lodash": "^4.14.109",
+    "@types/node": "^10.3.2",
+    "@types/validatorjs": "^3.7.1",
+    "jest": "^23.1.0",
+    "typescript": "^2.9.1"
+  }
+}
