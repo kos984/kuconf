@@ -6,6 +6,8 @@ export interface ILogger {
     warn(...args: any[]): any;
 }
 export interface IConfigOptions {
+    allowGet: boolean;
+    getSeparator: string;
     logger: ILogger;
 }
 export interface IParseEnvParams {

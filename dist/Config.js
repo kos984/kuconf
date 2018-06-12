@@ -9,11 +9,19 @@ class Config {
         this.handler = new ProxyHandler_1.default();
         /** ValidatorJs rules */
         this.schema = {};
-        this.config = {};
         this.parsedKeyPaths = [];
+        this.config = {};
         this.schema = schema;
-        options = { logger: console, ...options };
-        this.logger = options.logger;
+        this.options = { logger: console, allowGet: false, getSeparator: '.', ...options };
+        this.logger = this.options.logger;
+    }
+    get(path, defaultValue) {
+        if (!this.options.allowGet) {
+            throw new Error('get is not allowed');
+        }
+        const config = this.getConfig();
+        path = path.replace(new RegExp(this.options.getSeparator, 'g'), '.');
+        return _.get(config, path, defaultValue);
     }
     parseEnv(params) {
         const { prefix, delimiter, ignoreOneLodash, doNotWarnIfKeyOverridden } = {

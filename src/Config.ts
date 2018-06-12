@@ -11,15 +11,25 @@ export default class Config<ConfigSchema> {
 
   /** ValidatorJs rules */
   protected schema: any = {};
-  protected config: any = {};
   protected logger: ILogger;
   protected validation: ValidatorJs.Validator<any>;
   protected parsedKeyPaths: string[] = [];
+  protected config: ConfigSchema = {} as ConfigSchema;
+  protected options: IConfigOptions;
 
   constructor(schema: object, options?: IConfigOptions) {
     this.schema = schema;
-    options = { logger: console, ...options};
-    this.logger = options.logger;
+    this.options = { logger: console, allowGet: false, getSeparator: '.', ...options};
+    this.logger = this.options.logger;
+  }
+
+  public get(path: string, defaultValue?: any) {
+    if (!this.options.allowGet) {
+      throw new Error('get is not allowed');
+    }
+    const config = this.getConfig();
+    path = path.replace(new RegExp(this.options.getSeparator, 'g'), '.');
+    return _.get(config, path, defaultValue);
   }
 
   public parseEnv(params?: IParseEnvParams) {
@@ -86,7 +96,7 @@ export default class Config<ConfigSchema> {
       }
     });
 
-    this.config = newConfig;
+    this.config = newConfig as ConfigSchema;
 
     return this;
   }
