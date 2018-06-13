@@ -85,7 +85,6 @@ class Config {
     generateEnv() {
         this.initValidator();
         const rules = this.validation.rules;
-        console.log(rules);
         return Object.keys(rules).map((rule) => {
             return 'TEST__' + rule.replace(/\./g, '__').toUpperCase() + '=';
         }); // FIXME: delimiter

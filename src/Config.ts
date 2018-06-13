@@ -98,7 +98,6 @@ export default class Config<ConfigSchema> {
   public generateEnv(): string[] {
     this.initValidator();
     const rules = this.validation.rules;
-    console.log(rules);
     return Object.keys(rules).map((rule: string) => {
       return 'TEST__' + rule.replace(/\./g, '__').toUpperCase() + '=';
     }); // FIXME: delimiter
