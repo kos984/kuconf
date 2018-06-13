@@ -1,3 +1,7 @@
+import Config from './Config';
+
+const configObjKey = Symbol('config');
+
 export default class ProxyHandler {
 
   protected proxy = Symbol('proxy');
@@ -20,6 +24,7 @@ export default class ProxyHandler {
     value[this.proxy] = new Proxy(value, this);
     return value[this.proxy];
   }
+
   public getOwnPropertyDescriptor(target: any, name: string | any) {
     if (name === this.proxy) {
       return undefined;

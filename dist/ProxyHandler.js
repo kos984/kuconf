@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const configObjKey = Symbol('config');
 class ProxyHandler {
     constructor() {
         this.proxy = Symbol('proxy');

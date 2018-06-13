@@ -55,7 +55,35 @@ const conf = new Config<{
     };
   }
 }>({
-  aa: 'string',
+  redis: {
+    host: 'string',
+    port: 'integer',
+    sentinels: {
+      '*.host': 'string',
+      '*.port': 'integer',
+    }
+  },
+  db: {
+    host: 'required_with:db|string',
+    username: 'string',
+    password: 'string',
+    database: 'string',
+    port: 'integer',
+    replication: {
+      write: {
+        host: 'string',
+        username: 'string',
+        password: 'string',
+        port: 'number',
+      },
+      read: {
+        '*.host': 'string',
+        '*.username': 'string',
+        '*.password': 'string',
+        '*.port': 'integer',
+      },
+    },
+  }
 }, {
   allowGet: true,
   getSeparator: ':',
@@ -64,13 +92,15 @@ const conf = new Config<{
 
 const config = conf
   .parseEnv({ prefix: 'TEST__' })
-  // .validate()
+  .validate()
   .getConfig();
 
 function memUsed() {
   const used = process.memoryUsage().heapUsed / 1024 / 1024;
   console.log(`The script uses approximately ${Math.round(used * 100) / 100} MB`);
 }
+
+console.log(conf.generateEnv());
 
 console.log('config', config);
 
@@ -88,6 +118,7 @@ for (let i = 0; i < items; i++) {
 }
 
 console.log(testArr[0] === testArr[1]);
-console.log('aa', config.db.replication.read, conf.get('db:replication:read'), _.get(config, 'db.replication.read'));
+console.log(config.db.replication.read === conf.get('db:replication:read'));
+console.log(conf.get('db:replication:read') === _.get(config, 'db.replication.read'));
 
 memUsed();

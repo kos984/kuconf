@@ -4,7 +4,7 @@ import ProxyHandler from './ProxyHandler';
 export default class Config<ConfigSchema> {
     protected handler: ProxyHandler;
     /** ValidatorJs rules */
-    protected schema: any;
+    schema: any;
     protected logger: ILogger;
     protected validation: ValidatorJs.Validator<any>;
     protected parsedKeyPaths: string[];
@@ -16,4 +16,6 @@ export default class Config<ConfigSchema> {
     validate(): this;
     omitNotValidatedProps(params: IOmitNotValidatedProps): this;
     getConfig(): ConfigSchema;
+    generateEnv(): string[];
+    protected initValidator(): void;
 }

@@ -48,15 +48,7 @@ class Config {
         return this;
     }
     validate() {
-        this.validation = new ValidatorJs(this.config, this.schema);
-        // all rules should be in lower case, because we use set in validator
-        Object.keys(this.validation.rules).forEach(key => {
-            const newKey = key.toLowerCase();
-            if (key !== newKey) {
-                this.validation.rules[newKey] = this.validation.rules[key];
-                delete this.validation.rules[key];
-            }
-        });
+        this.initValidator();
         if (this.validation.fails()) {
             throw new Error(JSON.stringify(this.validation.errors));
         }
@@ -64,9 +56,7 @@ class Config {
     }
     omitNotValidatedProps(params) {
         params = { logOmitted: true, ...params };
-        if (!this.validation) {
-            this.validate();
-        }
+        this.initValidator();
         const newConfig = {};
         const rules = {};
         Object.keys(this.validation.rules).forEach(rule => (rules[rule.toLowerCase()] = true));
@@ -91,6 +81,28 @@ class Config {
     }
     getConfig() {
         return new Proxy(this.config, this.handler);
+    }
+    generateEnv() {
+        this.initValidator();
+        const rules = this.validation.rules;
+        console.log(rules);
+        return Object.keys(rules).map((rule) => {
+            return 'TEST__' + rule.replace(/\./g, '__').toUpperCase() + '=';
+        }); // FIXME: delimiter
+    }
+    initValidator() {
+        if (this.validation) {
+            return;
+        }
+        this.validation = new ValidatorJs(this.config, this.schema);
+        // all rules should be in lower case, because we use set in validator
+        Object.keys(this.validation.rules).forEach(key => {
+            const newKey = key.toLowerCase();
+            if (key !== newKey) {
+                this.validation.rules[newKey] = this.validation.rules[key];
+                delete this.validation.rules[key];
+            }
+        });
     }
 }
 exports.default = Config;

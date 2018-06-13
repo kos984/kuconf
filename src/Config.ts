@@ -10,7 +10,7 @@ export default class Config<ConfigSchema> {
   protected handler = new ProxyHandler();
 
   /** ValidatorJs rules */
-  protected schema: any = {};
+  public schema: any = {};
   protected logger: ILogger;
   protected validation: ValidatorJs.Validator<any>;
   protected parsedKeyPaths: string[] = [];
@@ -57,15 +57,7 @@ export default class Config<ConfigSchema> {
   }
 
   public validate() {
-    this.validation = new ValidatorJs(this.config, this.schema);
-    // all rules should be in lower case, because we use set in validator
-    Object.keys(this.validation.rules).forEach( key => {
-      const newKey = key.toLowerCase();
-      if (key !== newKey) {
-        this.validation.rules[newKey] = this.validation.rules[key];
-        delete this.validation.rules[key];
-      }
-    });
+    this.initValidator();
     if (this.validation.fails()) {
       throw new Error(JSON.stringify(this.validation.errors));
     }
@@ -74,9 +66,7 @@ export default class Config<ConfigSchema> {
 
   public omitNotValidatedProps(params: IOmitNotValidatedProps) {
     params = { logOmitted: true, ...params };
-    if (!this.validation) {
-      this.validate();
-    }
+    this.initValidator();
     const newConfig = {};
     const rules: { [key: string]: boolean} = {};
     Object.keys(this.validation.rules).forEach(rule => (rules[rule.toLowerCase()] = true));
@@ -102,6 +92,31 @@ export default class Config<ConfigSchema> {
   }
 
   public getConfig(): ConfigSchema {
-    return new Proxy(this.config, this.handler);
+    return new Proxy(this.config as any, this.handler);
   }
+
+  public generateEnv(): string[] {
+    this.initValidator();
+    const rules = this.validation.rules;
+    console.log(rules);
+    return Object.keys(rules).map((rule: string) => {
+      return 'TEST__' + rule.replace(/\./g, '__').toUpperCase() + '=';
+    }); // FIXME: delimiter
+  }
+
+  protected initValidator() {
+    if (this.validation) {
+      return;
+    }
+    this.validation = new ValidatorJs(this.config, this.schema);
+    // all rules should be in lower case, because we use set in validator
+    Object.keys(this.validation.rules).forEach( key => {
+      const newKey = key.toLowerCase();
+      if (key !== newKey) {
+        this.validation.rules[newKey] = this.validation.rules[key];
+        delete this.validation.rules[key];
+      }
+    });
+  }
+
 }
