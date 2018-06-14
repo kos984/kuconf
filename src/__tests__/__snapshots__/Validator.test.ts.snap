@@ -1,0 +1,48 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Validator rule: bool 1`] = `
+Errors {
+  "errors": Object {
+    "arr.4": Array [
+      "The arr.4 must be a true or false",
+    ],
+    "arr.5": Array [
+      "The arr.5 must be a true or false",
+    ],
+    "arr.6": Array [
+      "The arr.6 must be a true or false",
+    ],
+  },
+}
+`;
+
+exports[`Validator rule: cast 1`] = `
+Errors {
+  "errors": Object {},
+}
+`;
+
+exports[`Validator rule: cast 2`] = `
+Object {
+  "bool": true,
+  "boolDefaultFalse": false,
+  "boolDefaultTrue": true,
+  "date": 1999-12-31T00:00:00.000Z,
+  "dateTimeDefault": 1999-12-31T00:00:00.000Z,
+  "number": 100,
+  "numberDefault": 100,
+}
+`;
+
+exports[`Validator rule: objectKeysIn 1`] = `
+Errors {
+  "errors": Object {
+    "arr.2": Array [
+      "The arr.2 keys should be in Y,N",
+    ],
+    "arr.3": Array [
+      "The arr.3 keys should be in Y,N",
+    ],
+  },
+}
+`;

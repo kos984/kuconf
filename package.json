@@ -8,7 +8,7 @@
     "url": "https://github.com/kos984/kuconf.git"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "TZ=UTC node ./node_modules/.bin/jest -w 1",
     "build": "tsc",
     "lint": "tslint --project . 'src/**/*.ts'"
   },
@@ -22,12 +22,29 @@
     "validatorjs": "^3.14.2"
   },
   "devDependencies": {
+    "@types/jest": "^23.1.0",
     "@types/lodash": "^4.14.109",
     "@types/node": "^10.3.2",
     "@types/validatorjs": "^3.7.1",
     "jest": "^23.1.0",
+    "ts-jest": "^22.4.6",
     "tslint": "^5.10.0",
     "tslint-microsoft-contrib": "^5.0.3",
     "typescript": "^2.9.1"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "rootDir": "./src",
+    "transform": {
+      ".(ts|tsx)": "<rootDir>/../node_modules/ts-jest/preprocessor.js"
+    },
+    "testRegex": "__tests__\\/.*\\.test\\.ts$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "json"
+    ],
+    "cacheDirectory": "<rootDir>/../node_modules/.cache/jest"
   }
 }

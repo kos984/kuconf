@@ -12,6 +12,8 @@ var ECastType;
 var ERule;
 (function (ERule) {
     ERule["Required"] = "required";
+    ERule["Date"] = "date";
+    ERule["Numeric"] = "numeric";
     ERule["String"] = "string";
     ERule["Min"] = "min";
     ERule["Max"] = "max";

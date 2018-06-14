@@ -10,6 +10,8 @@ export enum ECastType {
 
 export enum ERule {
   Required = 'required',
+  Date = 'date',
+  Numeric = 'numeric',
   String = 'string',
   Min = 'min',
   Max = 'max',
