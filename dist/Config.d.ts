@@ -1,12 +1,13 @@
-import * as ValidatorJs from 'validatorjs';
+/// <reference types="validatorjs" />
 import ProxyHandler from './ProxyHandler';
 import { IConfigOptions, IGenerateEnvParams, ILogger, IOmitNotValidatedProps, IParseEnvParams } from './types';
+import Validator from './Validator';
 export default class Config<ConfigSchema> {
     /** ValidatorJs rules */
     schema: any;
     protected handler: ProxyHandler;
     protected logger: ILogger;
-    protected validation: ValidatorJs.Validator<any>;
+    protected validation: Validator.Validator<any>;
     protected parsedKeyPaths: string[];
     protected config: ConfigSchema;
     protected options: IConfigOptions;

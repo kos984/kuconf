@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const _ = require("lodash");
-const ValidatorJs = require("validatorjs");
 const ProxyHandler_1 = require("./ProxyHandler");
+const Validator_1 = require("./Validator");
 class Config {
     constructor(schema, options) {
         /** ValidatorJs rules */
@@ -119,7 +119,7 @@ class Config {
         if (this.validation) {
             return;
         }
-        this.validation = new ValidatorJs(this.config, this.schema);
+        this.validation = new Validator_1.default(this.config, this.schema);
         // all rules should be in lower case, because we use set in validator
         Object.keys(this.validation.rules).forEach(key => {
             const newKey = key.toLowerCase();

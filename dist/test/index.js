@@ -23,6 +23,7 @@ process.env.TEST__REDIS__SENTINELS__0__PORT = '26379';
 process.env.TEST__REDIS__SENTINELS__0__TEST = 'TEST';
 process.env.TEST__REDIS__SENTINELS__1__HOST = 'localhost';
 process.env.TEST__REDIS__SENTINELS__1__PORT = '26379';
+process.env.TEST__REDIS__SENTINELS__1__TEST = 'true';
 const conf = new Config_1.default({
     db: {
         database: 'string',
@@ -51,7 +52,7 @@ const conf = new Config_1.default({
         sentinels: {
             '*.host': 'string',
             '*.port': 'integer',
-            '*.test': 'required',
+            '*.test': 'required|bool|cast:boolean,false',
         },
     },
 }, {

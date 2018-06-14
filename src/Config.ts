@@ -1,7 +1,7 @@
 import * as _ from 'lodash';
-import * as ValidatorJs from 'validatorjs';
 import ProxyHandler, { validate as partialValidate } from './ProxyHandler';
 import { IConfigOptions, IGenerateEnvParams, ILogger, IOmitNotValidatedProps, IParseEnvParams } from './types';
+import Validator from './Validator';
 
 export default class Config<ConfigSchema> {
 
@@ -10,7 +10,7 @@ export default class Config<ConfigSchema> {
 
   protected handler = new ProxyHandler(this);
   protected logger: ILogger;
-  protected validation: ValidatorJs.Validator<any>;
+  protected validation: Validator.Validator<any>;
   protected parsedKeyPaths: string[] = [];
   protected config: ConfigSchema = {} as ConfigSchema;
   protected options: IConfigOptions;
@@ -132,7 +132,7 @@ export default class Config<ConfigSchema> {
     if (this.validation) {
       return;
     }
-    this.validation = new ValidatorJs(this.config, this.schema);
+    this.validation = new Validator(this.config, this.schema);
     // all rules should be in lower case, because we use set in validator
     Object.keys(this.validation.rules).forEach( key => {
       const newKey = key.toLowerCase();
