@@ -1,6 +1,6 @@
 import * as ValidatorJs from 'validatorjs';
 import ProxyHandler from './ProxyHandler';
-import { IConfigOptions, ILogger, IOmitNotValidatedProps, IParseEnvParams } from './types';
+import { IConfigOptions, IGenerateEnvParams, ILogger, IOmitNotValidatedProps, IParseEnvParams } from './types';
 export default class Config<ConfigSchema> {
     /** ValidatorJs rules */
     schema: any;
@@ -16,7 +16,7 @@ export default class Config<ConfigSchema> {
     validate(confPart?: any): this;
     omitNotValidatedProps(params: IOmitNotValidatedProps): this;
     getConfig(): ConfigSchema;
-    generateEnv(): string[];
+    generateEnv(params?: IGenerateEnvParams): string[];
     getErrorsForPath(path?: string): any;
     protected initValidator(): void;
 }

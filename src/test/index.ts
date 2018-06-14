@@ -1,6 +1,7 @@
+// tslint:disable:no-console
+
 import * as _ from 'lodash';
 import Config from '../Config';
-import { validate } from '../ProxyHandler';
 
 // db
 process.env.TEST__DB__USERNAME = 'username';
@@ -13,11 +14,11 @@ process.env.TEST__DB__REPLICATION__WRITE__HOST = 'write.example.com';
 process.env.TEST__DB__REPLICATION__WRITE__USERNAME = 'username_write';
 process.env.TEST__DB__REPLICATION__WRITE__PASSWORD = 'password_write';
 
-process.env.TEST__DB__REPLICATION__READ__0__HOST = 'read0.example.com'
+process.env.TEST__DB__REPLICATION__READ__0__HOST = 'read0.example.com';
 process.env.TEST__DB__REPLICATION__READ__0__USERNAME = 'username_read_0';
 process.env.TEST__DB__REPLICATION__READ__0__PASSWORD = 'password_read_0';
 
-process.env.TEST__DB__REPLICATION__READ__1__HOST = 'read1.example.com'
+process.env.TEST__DB__REPLICATION__READ__1__HOST = 'read1.example.com';
 process.env.TEST__DB__REPLICATION__READ__1__USERNAME = 'username_read_1';
 process.env.TEST__DB__REPLICATION__READ__1__PASSWORD = 'password_read_1';
 

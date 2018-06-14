@@ -1,9 +1,7 @@
 import * as _ from 'lodash';
 import * as ValidatorJs from 'validatorjs';
 import ProxyHandler, { validate as partialValidate } from './ProxyHandler';
-import { IConfigOptions, ILogger, IOmitNotValidatedProps, IParseEnvParams } from './types';
-
-const proxy = Symbol('proxy');
+import { IConfigOptions, IGenerateEnvParams, ILogger, IOmitNotValidatedProps, IParseEnvParams } from './types';
 
 export default class Config<ConfigSchema> {
 
@@ -97,12 +95,16 @@ export default class Config<ConfigSchema> {
     return new Proxy(this.config as any, this.handler);
   }
 
-  public generateEnv(): string[] {
+  public generateEnv(params?: IGenerateEnvParams): string[] {
+    const { prefix, delimiter } = {
+      delimiter: '__',
+      prefix: '',
+      ...params };
     this.initValidator();
     const rules = this.validation.rules;
     return Object.keys(rules).map((rule: string) => {
-      return 'TEST__' + rule.replace(/\./g, '__').toUpperCase() + '=';
-    }); // FIXME: delimiter
+      return prefix + rule.replace(/\./g, delimiter).toUpperCase() + '=';
+    });
   }
 
   public getErrorsForPath(path?: string) {

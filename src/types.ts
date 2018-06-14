@@ -20,6 +20,14 @@ export interface IParseEnvParams {
   ignoreOneLodash?: boolean;
   doNotWarnIfKeyOverridden?: boolean;
 }
+
+export interface IGenerateEnvParams {
+  /** empty by default */
+  prefix?: string;
+  /** __ by default */
+  delimiter?: string;
+}
+
 export interface IOmitNotValidatedProps {
   /** true by default */
   logOmitted: boolean;

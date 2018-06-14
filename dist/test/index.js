@@ -1,4 +1,5 @@
 "use strict";
+// tslint:disable:no-console
 Object.defineProperty(exports, "__esModule", { value: true });
 const _ = require("lodash");
 const Config_1 = require("../Config");

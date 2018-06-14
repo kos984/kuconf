@@ -3,7 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const _ = require("lodash");
 const ValidatorJs = require("validatorjs");
 const ProxyHandler_1 = require("./ProxyHandler");
-const proxy = Symbol('proxy');
 class Config {
     constructor(schema, options) {
         /** ValidatorJs rules */
@@ -84,12 +83,17 @@ class Config {
         this.initValidator();
         return new Proxy(this.config, this.handler);
     }
-    generateEnv() {
+    generateEnv(params) {
+        const { prefix, delimiter } = {
+            delimiter: '__',
+            prefix: '',
+            ...params
+        };
         this.initValidator();
         const rules = this.validation.rules;
         return Object.keys(rules).map((rule) => {
-            return 'TEST__' + rule.replace(/\./g, '__').toUpperCase() + '=';
-        }); // FIXME: delimiter
+            return prefix + rule.replace(/\./g, delimiter).toUpperCase() + '=';
+        });
     }
     getErrorsForPath(path) {
         this.initValidator();
