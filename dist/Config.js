@@ -6,9 +6,9 @@ const ProxyHandler_1 = require("./ProxyHandler");
 const proxy = Symbol('proxy');
 class Config {
     constructor(schema, options) {
-        this.handler = new ProxyHandler_1.default();
         /** ValidatorJs rules */
         this.schema = {};
+        this.handler = new ProxyHandler_1.default(this);
         this.parsedKeyPaths = [];
         this.config = {};
         this.schema = schema;
@@ -25,10 +25,10 @@ class Config {
     }
     parseEnv(params) {
         const { prefix, delimiter, ignoreOneLodash, doNotWarnIfKeyOverridden } = {
-            prefix: '',
             delimiter: '__',
-            ignoreOneLodash: false,
             doNotWarnIfKeyOverridden: false,
+            ignoreOneLodash: false,
+            prefix: '',
             ...params
         };
         const config = this.config;
@@ -47,10 +47,11 @@ class Config {
         });
         return this;
     }
-    validate() {
+    validate(confPart) {
         this.initValidator();
-        if (this.validation.fails()) {
-            throw new Error(JSON.stringify(this.validation.errors));
+        const errors = confPart ? confPart[ProxyHandler_1.validate]() : this.validation.errors;
+        if (errors) {
+            throw new Error(JSON.stringify(errors));
         }
         return this;
     }
@@ -80,6 +81,7 @@ class Config {
         return this;
     }
     getConfig() {
+        this.initValidator();
         return new Proxy(this.config, this.handler);
     }
     generateEnv() {
@@ -88,6 +90,26 @@ class Config {
         return Object.keys(rules).map((rule) => {
             return 'TEST__' + rule.replace(/\./g, '__').toUpperCase() + '=';
         }); // FIXME: delimiter
+    }
+    getErrorsForPath(path) {
+        this.initValidator();
+        if (!this.validation.errors) {
+            return null;
+        }
+        if (!path) {
+            return this.validation.errors;
+        }
+        const result = {
+            errors: {},
+        };
+        let found = false;
+        Object.keys(this.validation.errors.errors).forEach(key => {
+            if (key.indexOf(path) === 0) {
+                found = true;
+                result.errors[key] = this.validation.errors.errors[key];
+            }
+        });
+        return found ? result : null;
     }
     initValidator() {
         if (this.validation) {
@@ -102,6 +124,7 @@ class Config {
                 delete this.validation.rules[key];
             }
         });
+        this.validation.fails();
     }
 }
 exports.default = Config;

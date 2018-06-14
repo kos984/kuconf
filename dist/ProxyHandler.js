@@ -1,18 +1,32 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const configObjKey = Symbol('config');
+exports.validate = Symbol('validate'); // move to Config constructor ?
+exports.rulesPath = Symbol('rulesPath');
 class ProxyHandler {
-    constructor() {
+    constructor(config) {
+        this.config = config;
         this.proxy = Symbol('proxy');
     }
     get(target, name) {
-        if (name === this.proxy) {
+        if (name === exports.validate) {
+            return () => {
+                let errors;
+                if (target[exports.rulesPath] === null) {
+                    errors = this.config.getErrorsForPath();
+                }
+                else if (target[exports.rulesPath]) {
+                    errors = this.config.getErrorsForPath(target[exports.rulesPath]);
+                }
+                return errors;
+            };
+        }
+        if (name === this.proxy || name === exports.rulesPath) {
             return undefined;
         }
         if (typeof name !== 'string') {
             return target[name];
         }
-        let value = target[name.toLowerCase()];
+        const value = target[name.toLowerCase()];
         if (!value || typeof value !== 'object') {
             return value;
         }
@@ -21,10 +35,11 @@ class ProxyHandler {
             return value[this.proxy];
         }
         value[this.proxy] = new Proxy(value, this);
+        value[exports.rulesPath] = target[exports.rulesPath] ? `${target[exports.rulesPath]}.${name}` : name;
         return value[this.proxy];
     }
     getOwnPropertyDescriptor(target, name) {
-        if (name === this.proxy) {
+        if (name === this.proxy || name === exports.rulesPath) {
             return undefined;
         }
         const path = typeof name === 'string' ? name.toLowerCase() : name;
