@@ -12,6 +12,9 @@ export default class Config<ConfigSchema> {
     protected config: ConfigSchema;
     protected options: IConfigOptions;
     constructor(schema: object, options?: IConfigOptions);
+    prepareRules(schema: any): {
+        [key: string]: string;
+    };
     get(path: string, defaultValue?: any): any;
     parseEnv(params?: IParseEnvParams): this;
     validate(confPart?: any): this;

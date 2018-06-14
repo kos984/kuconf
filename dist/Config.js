@@ -10,9 +10,29 @@ class Config {
         this.handler = new ProxyHandler_1.default(this);
         this.parsedKeyPaths = [];
         this.config = {};
-        this.schema = schema;
+        this.schema = this.prepareRules(schema);
         this.options = { logger: console, allowGet: false, getSeparator: '.', ...options };
         this.logger = this.options.logger;
+    }
+    prepareRules(schema) {
+        const result = {};
+        const parse = (obj, start) => {
+            Object.keys(obj).forEach(key => {
+                const fullKey = start ? start + '.' : '';
+                const value = obj[key];
+                if (typeof value === 'string') {
+                    result[`${fullKey}${key}`] = value;
+                }
+                else if (Array.isArray(value)) {
+                    parse(value[0], `${fullKey}${key}.*`);
+                }
+                else {
+                    parse(value, `${fullKey}${key}`);
+                }
+            });
+        };
+        parse(schema);
+        return result;
     }
     get(path, defaultValue) {
         if (!this.options.allowGet) {

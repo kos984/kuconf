@@ -16,9 +16,28 @@ export default class Config<ConfigSchema> {
   protected options: IConfigOptions;
 
   constructor(schema: object, options?: IConfigOptions) {
-    this.schema = schema;
+    this.schema = this.prepareRules(schema);
     this.options = { logger: console, allowGet: false, getSeparator: '.', ...options};
     this.logger = this.options.logger;
+  }
+
+  public prepareRules(schema: any) {
+    const result: { [key: string]: string } = {};
+    const parse = (obj: any, start?: string) => {
+      Object.keys(obj).forEach(key => {
+        const fullKey = start ? start + '.' : '';
+        const value = obj[key];
+        if (typeof value === 'string') {
+          result[`${fullKey}${key}`] = value;
+        } else if (Array.isArray(value)) {
+          parse(value[0], `${fullKey}${key}.*`);
+        } else {
+          parse(value, `${fullKey}${key}`);
+        }
+      });
+    };
+    parse(schema);
+    return result;
   }
 
   public get(path: string, defaultValue?: any) {
@@ -141,6 +160,7 @@ export default class Config<ConfigSchema> {
         delete this.validation.rules[key];
       }
     });
+
     this.validation.fails();
   }
 
