@@ -1,16 +1,16 @@
 import * as _ from 'lodash';
-import { ILogger, IConfigOptions, IParseEnvParams, IOmitNotValidatedProps } from "./types";
 import * as ValidatorJs from 'validatorjs';
 import ProxyHandler from './ProxyHandler';
+import { IConfigOptions, ILogger, IOmitNotValidatedProps, IParseEnvParams } from './types';
 
 const proxy = Symbol('proxy');
 
 export default class Config<ConfigSchema> {
 
-  protected handler = new ProxyHandler();
-
   /** ValidatorJs rules */
   public schema: any = {};
+
+  protected handler = new ProxyHandler();
   protected logger: ILogger;
   protected validation: ValidatorJs.Validator<any>;
   protected parsedKeyPaths: string[] = [];

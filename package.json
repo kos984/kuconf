@@ -3,13 +3,14 @@
   "version": "0.0.1",
   "description": "nodejs node js case insensitive config",
   "main": "dist/Config.js",
-  "repository" : {
-    "type" : "git",
-    "url" : "https://github.com/kos984/kuconf.git"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kos984/kuconf.git"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc"
+    "build": "tsc",
+    "lint": "tslint --project . 'src/**/*.ts'"
   },
   "keywords": [
     "config"
@@ -25,6 +26,8 @@
     "@types/node": "^10.3.2",
     "@types/validatorjs": "^3.7.1",
     "jest": "^23.1.0",
+    "tslint": "^5.10.0",
+    "tslint-microsoft-contrib": "^5.0.3",
     "typescript": "^2.9.1"
   }
 }

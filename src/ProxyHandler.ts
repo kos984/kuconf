@@ -13,7 +13,7 @@ export default class ProxyHandler {
     if (typeof name !== 'string') {
       return target[name];
     }
-    let value = target[name.toLowerCase()];
+    const value = target[name.toLowerCase()];
     if (!value || typeof value !== 'object') {
       return value;
     }
