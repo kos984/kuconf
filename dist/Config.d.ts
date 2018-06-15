@@ -21,6 +21,6 @@ export default class Config<ConfigSchema> {
     omitNotValidatedProps(params: IOmitNotValidatedProps): this;
     getConfig(): ConfigSchema;
     generateEnv(params?: IGenerateEnvParams): string[];
-    getErrorsForPath(path?: string): any;
+    getValidationErrors(path?: string): any;
     protected initValidator(): void;
 }

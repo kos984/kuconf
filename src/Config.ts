@@ -75,7 +75,10 @@ export default class Config<ConfigSchema> {
 
   public validate(confPart?: any) {
     this.initValidator();
-    const errors = confPart ? confPart[partialValidate]() : this.validation.errors;
+    if (arguments.length > 0 && (!confPart || !confPart[partialValidate])) {
+      throw new Error('only objects allowed for validation');
+    }
+    const errors = arguments.length !== 0 ? confPart[partialValidate]() : this.validation.errors;
     if (errors) {
       throw new Error(JSON.stringify(errors));
     }
@@ -126,7 +129,7 @@ export default class Config<ConfigSchema> {
     });
   }
 
-  public getErrorsForPath(path?: string) {
+  public getValidationErrors(path?: string) {
     this.initValidator();
     if (!this.validation.errors) {
       return null;

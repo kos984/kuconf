@@ -68,7 +68,10 @@ class Config {
     }
     validate(confPart) {
         this.initValidator();
-        const errors = confPart ? confPart[ProxyHandler_1.validate]() : this.validation.errors;
+        if (arguments.length > 0 && (!confPart || !confPart[ProxyHandler_1.validate])) {
+            throw new Error('only objects allowed for validation');
+        }
+        const errors = arguments.length !== 0 ? confPart[ProxyHandler_1.validate]() : this.validation.errors;
         if (errors) {
             throw new Error(JSON.stringify(errors));
         }
@@ -115,7 +118,7 @@ class Config {
             return prefix + rule.replace(/\./g, delimiter).toUpperCase() + '=';
         });
     }
-    getErrorsForPath(path) {
+    getValidationErrors(path) {
         this.initValidator();
         if (!this.validation.errors) {
             return null;
