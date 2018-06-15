@@ -35,7 +35,6 @@ describe('Config', () => {
   it('validation redis should throw error', () => {
     expect(() => conf.validate(config.redis.host)).toThrowErrorMatchingSnapshot();
   });
-  // FIXME: need add this to doc
   it('validation redis.host should throw error', () => {
     expect(() => conf.validate(config.redis.host)).toThrowErrorMatchingSnapshot();
   });
