@@ -10,7 +10,8 @@
   "scripts": {
     "test": "TZ=UTC node ./node_modules/.bin/jest -w 1",
     "build": "tsc",
-    "lint": "tslint --project . 'src/**/*.ts'"
+    "lint": "tslint --project . 'src/**/*.ts'",
+    "precommit": "npm run test && npm run lint"
   },
   "keywords": [
     "config"
@@ -26,6 +27,7 @@
     "@types/lodash": "^4.14.109",
     "@types/node": "^10.3.2",
     "@types/validatorjs": "^3.7.1",
+    "husky": "^0.14.3",
     "jest": "^23.1.0",
     "ts-jest": "^22.4.6",
     "tslint": "^5.10.0",

@@ -51,4 +51,10 @@ describe('Config', () => {
     expect(config.db.username === c.db.UserName).toBeTruthy();
     expect(config.db.database === c.db.dataBase).toBeTruthy();
   });
+  it('lodash get should works', () => {
+    expect(config.db.replication.write === _.get(config, 'db.replication.write'));
+  });
+  it('conf.get should works', () => {
+    expect(config.db.replication.write === conf.get('db.replication.write'));
+  });
 });

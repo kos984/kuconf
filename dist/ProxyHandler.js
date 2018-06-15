@@ -40,9 +40,8 @@ class ProxyHandler {
         return Object.getOwnPropertyDescriptor(target, path);
     }
     [exports.validate](target) {
-        const path = this.cache.has(target) ? this.cache.get(target).rules : undefined;
-        console.log('path', path);
         return () => {
+            const path = this.cache.has(target) ? this.cache.get(target).rules : undefined;
             let errors = null;
             if (path === null) {
                 errors = this.config.getValidationErrors();

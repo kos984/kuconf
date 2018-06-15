@@ -45,9 +45,8 @@ export default class ProxyHandler {
   }
 
   protected [validate](target: any) {
-    const path = this.cache.has(target) ? this.cache.get(target).rules : undefined;
-    console.log('path', path);
     return () => {
+      const path = this.cache.has(target) ? this.cache.get(target).rules : undefined;
       let errors: any = null;
       if (path === null ) {
         errors = this.config.getValidationErrors();

@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 require("./env");
+const _ = require("lodash");
 const Config_1 = require("../../Config");
 const validationRules_1 = require("./validationRules");
 describe('Config', () => {
@@ -47,5 +48,11 @@ describe('Config', () => {
         expect(config.db === c.DB).toBeTruthy();
         expect(config.db.username === c.db.UserName).toBeTruthy();
         expect(config.db.database === c.db.dataBase).toBeTruthy();
+    });
+    it('lodash get should works', () => {
+        expect(config.db.replication.write === _.get(config, 'db.replication.write'));
+    });
+    it('conf.get should works', () => {
+        expect(config.db.replication.write === conf.get('db.replication.write'));
     });
 });
