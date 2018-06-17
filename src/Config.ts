@@ -65,7 +65,7 @@ export default class Config<ConfigSchema> {
       throw new Error('only objects allowed for validation');
     }
     const errors = arguments.length !== 0 ? confPart[partialValidate]() : this.validation.errors;
-    if (errors) {
+    if (errors && Object.keys(errors.errors).length) {
       throw new Error(JSON.stringify(errors));
     }
     return this;
