@@ -2,6 +2,7 @@
 
 import * as _ from 'lodash';
 import Config from '../Config';
+import EnvParser from '../parsers/EnvParser';
 
 // db
 process.env.TEST__DB__USERNAME = 'username';
@@ -60,45 +61,51 @@ const conf = new Config<{
       }>;
     };
   }
-}>({
-  db: {
-    database: 'string',
-    host: 'required_with:db|string',
-    password: 'string',
-    port: 'integer',
-    replication: {
-      read: {
-        '*.host': 'string',
-        '*.password': 'string',
-        '*.port': 'integer',
-        '*.username': 'string',
-      },
-      write: {
-        host: 'string',
+}>((new EnvParser({
+  prefix: 'TEST__',
+})).get(), {
+  caseSensitive: true,
+  get: {
+    allowed: true,
+    separator: ':',
+  },
+  validation: {
+    rules: {
+      db: {
+        database: 'string',
+        host: 'required_with:db|string',
         password: 'string',
-        port: 'number',
+        port: 'integer',
+        replication: {
+          read: {
+            '*.host': 'string',
+            '*.password': 'string',
+            '*.port': 'integer',
+            '*.username': 'string',
+          },
+          write: {
+            host: 'string',
+            password: 'string',
+            port: 'number',
+            username: 'string',
+          },
+        },
         username: 'string',
       },
+      redis: {
+        host: 'string',
+        port: 'integer',
+        sentinels: {
+          '*.host': 'string',
+          '*.port': 'integer',
+          '*.test': 'required|bool|cast:boolean,false',
+        },
+      },
     },
-    username: 'string',
   },
-  redis: {
-    host: 'string',
-    port: 'integer',
-    sentinels: {
-      '*.host': 'string',
-      '*.port': 'integer',
-      '*.test': 'required|bool|cast:boolean,false',
-    },
-  },
-}, {
-  allowGet: true,
-  getSeparator: ':',
-  logger: console,
 });
 
 const config = conf
-  .parseEnv({ prefix: 'TEST__' })
   // .validate()
   .getConfig();
 
@@ -107,7 +114,7 @@ function memUsed() {
   console.log(`The script uses approximately ${Math.round(used * 100) / 100} MB`);
 }
 
-console.log(conf.generateEnv());
+// console.log(conf.generateEnv());
 
 console.log('config', config);
 

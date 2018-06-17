@@ -1,76 +1,62 @@
 import * as _ from 'lodash';
 import ProxyHandler, { validate as partialValidate } from './ProxyHandler';
-import { IConfigOptions, IGenerateEnvParams, ILogger, IOmitNotValidatedProps, IParseEnvParams } from './types';
+import { IConfigOptions, IGenerateEnvParams, ILogger, IOmitNotValidatedProps } from './types';
 import Validator from './Validator';
+
+// FIXME: fix logger
+
+const privateStoreKey = Symbol('config');
 
 export default class Config<ConfigSchema> {
 
   /** ValidatorJs rules */
-  public schema: any = {};
+  // public schema: any = {};
+
+  protected config: object = {};
+  protected configObject: ConfigSchema = {} as ConfigSchema;
 
   protected handler = new ProxyHandler(this);
   protected logger: ILogger;
   protected validation: Validator.Validator<any>;
-  protected parsedKeyPaths: string[] = [];
-  protected config: ConfigSchema = {} as ConfigSchema;
+  // protected parsedKeyPaths: string[] = [];
   protected options: IConfigOptions;
 
-  constructor(schema: object, options?: IConfigOptions) {
-    this.schema = this.prepareRules(schema);
-    this.options = { logger: console, allowGet: false, getSeparator: '.', ...options};
+  protected [privateStoreKey]: Map<any, any>;
+
+  constructor(config: object, options?: Partial<IConfigOptions>) {
+    this.config = config;
+    // this.schema = this.prepareRules(schema);
+    this.options = {
+      get: {
+        allowed: false,
+        separator: '.',
+      },
+      logger: console,
+      validation: null,
+      ...options};
     this.logger = this.options.logger;
   }
 
-  public prepareRules(schema: any) {
-    const result: { [key: string]: string } = {};
-    const parse = (obj: any, start?: string) => {
-      Object.keys(obj).forEach(key => {
-        const fullKey = start ? start + '.' : '';
-        const value = obj[key];
-        if (typeof value === 'string') {
-          result[`${fullKey}${key}`] = value;
-        } else if (Array.isArray(value)) {
-          parse(value[0], `${fullKey}${key}.*`);
-        } else {
-          parse(value, `${fullKey}${key}`);
-        }
-      });
-    };
-    parse(schema);
-    return result;
+  /**
+   * allowed only before getConfig;
+   */
+  public add(path: string, config: object) {
+    // FIXME: implement
+
   }
 
   public get(path: string, defaultValue?: any) {
-    if (!this.options.allowGet) {
+    if (!this.options.get.allowed) {
       throw new Error('get is not allowed');
     }
     const config = this.getConfig();
-    path = path.replace(new RegExp(this.options.getSeparator, 'g'), '.');
+    path = path.replace(new RegExp(this.options.get.separator, 'g'), '.');
     return _.get(config, path, defaultValue);
   }
 
-  public parseEnv(params?: IParseEnvParams) {
-    const { prefix, delimiter, ignoreOneLodash, doNotWarnIfKeyOverridden } = {
-      delimiter: '__',
-      doNotWarnIfKeyOverridden: false,
-      ignoreOneLodash: false,
-      prefix: '',
-      ...params };
-    const config: any = this.config;
-    Object.keys(process.env)
-      .filter(key => (key.indexOf(prefix) === 0))
-      .map(key => {
-        let keyPath = key.replace(prefix, '').split(delimiter).join('.').toLowerCase();
-        if (ignoreOneLodash) {
-          keyPath = keyPath.replace(/_/g, '');
-        }
-        if (_.has(config, keyPath) && !doNotWarnIfKeyOverridden) {
-          this.logger.warn(`key ${key} will override defined property: ${keyPath}`);
-        }
-        this.parsedKeyPaths.push(keyPath);
-        _.set(config, keyPath, process.env[key]);
-      });
-    return this;
+  public getConfig(): ConfigSchema {
+    this.initValidator();
+    return new Proxy(this.config as any, this.handler);
   }
 
   public validate(confPart?: any) {
@@ -85,7 +71,47 @@ export default class Config<ConfigSchema> {
     return this;
   }
 
-  public omitNotValidatedProps(params: IOmitNotValidatedProps) {
+  public getValidationErrors(path?: string) {
+    this.initValidator();
+    if (!this.validation.errors) {
+      return null;
+    }
+    if (!path) {
+      return this.validation.errors;
+    }
+    const result: any = {
+      errors: {},
+    };
+    let found = false;
+    Object.keys(this.validation.errors.errors).forEach(key => {
+      if (key.indexOf(path) === 0) {
+        found = true;
+        result.errors[key] = (this.validation.errors.errors as any)[key];
+      }
+    });
+    return found ? result : null;
+  }
+
+  protected initValidator() {
+    if (!this.options.validation || this.validation) {
+      return;
+    }
+    // FIXME: need own validator, exists it not correct
+    this.validation = new Validator(this.config, this.prepareRules(this.options.validation.rules));
+    // all rules should be in lower case, because we use set in validator
+    Object.keys(this.validation.rules).forEach( key => {
+      const newKey = key.toLowerCase();
+      if (key !== newKey) {
+        this.validation.rules[newKey] = this.validation.rules[key];
+        delete this.validation.rules[key];
+      }
+    });
+    this.validation.fails();
+  }
+
+  // in progress, so for not not public
+  /*
+  private omitNotValidatedProps(params: IOmitNotValidatedProps) {
     params = { logOmitted: true, ...params };
     this.initValidator();
     const newConfig = {};
@@ -112,59 +138,25 @@ export default class Config<ConfigSchema> {
     return this;
   }
 
-  public getConfig(): ConfigSchema {
-    this.initValidator();
-    return new Proxy(this.config as any, this.handler);
-  }
+  */
 
-  public generateEnv(params?: IGenerateEnvParams): string[] {
-    const { prefix, delimiter } = {
-      delimiter: '__',
-      prefix: '',
-      ...params };
-    this.initValidator();
-    const rules = this.validation.rules;
-    return Object.keys(rules).map((rule: string) => {
-      return prefix + rule.replace(/\./g, delimiter).toUpperCase() + '=';
-    });
-  }
-
-  public getValidationErrors(path?: string) {
-    this.initValidator();
-    if (!this.validation.errors) {
-      return null;
-    }
-    if (!path) {
-      return this.validation.errors;
-    }
-    const result: any = {
-      errors: {},
+  protected prepareRules(schema: any) {
+    const result: { [key: string]: string } = {};
+    const parse = (obj: any, start?: string) => {
+      Object.keys(obj).forEach(key => {
+        const fullKey = start ? start + '.' : '';
+        const value = obj[key];
+        if (typeof value === 'string') {
+          result[`${fullKey}${key}`] = value;
+        } else if (Array.isArray(value)) {
+          parse(value[0], `${fullKey}${key}.*`);
+        } else {
+          parse(value, `${fullKey}${key}`);
+        }
+      });
     };
-    let found = false;
-    Object.keys(this.validation.errors.errors).forEach(key => {
-      if (key.indexOf(path) === 0) {
-        found = true;
-        result.errors[key] = (this.validation.errors.errors as any)[key];
-      }
-    });
-    return found ? result : null;
-  }
-
-  protected initValidator() {
-    if (this.validation) {
-      return;
-    }
-    this.validation = new Validator(this.config, this.schema);
-    // all rules should be in lower case, because we use set in validator
-    Object.keys(this.validation.rules).forEach( key => {
-      const newKey = key.toLowerCase();
-      if (key !== newKey) {
-        this.validation.rules[newKey] = this.validation.rules[key];
-        delete this.validation.rules[key];
-      }
-    });
-
-    this.validation.fails();
+    parse(schema);
+    return result;
   }
 
 }

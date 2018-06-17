@@ -3,19 +3,17 @@ Object.defineProperty(exports, "__esModule", { value: true });
 require("./env");
 const _ = require("lodash");
 const Config_1 = require("../../Config");
+const EnvParser_1 = require("../../parsers/EnvParser");
 const validationRules_1 = require("./validationRules");
 describe('Config', () => {
-    const conf = new Config_1.default(validationRules_1.default, {
-        allowGet: true,
-        getSeparator: ':',
-        logger: console,
-    });
-    conf
-        .parseEnv({
-        delimiter: '__',
-        doNotWarnIfKeyOverridden: false,
-        ignoreOneLodash: true,
-        prefix: 'TEST__',
+    const conf = new Config_1.default((new EnvParser_1.default({ prefix: 'TEST__' })).get(), {
+        get: {
+            allowed: true,
+            separator: ':',
+        },
+        validation: {
+            rules: validationRules_1.default,
+        },
     });
     const config = conf.getConfig();
     it('rules should be parsed', () => {
@@ -33,7 +31,6 @@ describe('Config', () => {
     it('validation redis should throw error', () => {
         expect(() => conf.validate(config.redis.host)).toThrowErrorMatchingSnapshot();
     });
-    // FIXME: need add this to doc
     it('validation redis.host should throw error', () => {
         expect(() => conf.validate(config.redis.host)).toThrowErrorMatchingSnapshot();
     });

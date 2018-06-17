@@ -2,22 +2,23 @@ import './env';
 
 import * as _ from 'lodash';
 import Config from '../../Config';
+import EnvParser from '../../parsers/EnvParser';
 import { IConfig } from './types';
 import rules from './validationRules';
 
 describe('Config', () => {
-  const conf = new Config<IConfig>(rules, {
-    allowGet: true,
-    getSeparator: ':',
-    logger: console,
-  });
-  conf
-    .parseEnv({
-      delimiter: '__',
-      doNotWarnIfKeyOverridden: false,
-      ignoreOneLodash: true,
-      prefix: 'TEST__',
-    });
+  const conf = new Config<IConfig>(
+    (new EnvParser({ prefix: 'TEST__' })).get(),
+    {
+      get: {
+        allowed: true,
+        separator: ':',
+      },
+      validation: {
+        rules,
+      },
+    },
+  );
   const config = conf.getConfig();
 
   it ('rules should be parsed', () => {
