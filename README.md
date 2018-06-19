@@ -23,7 +23,7 @@
 
 example
 ```
-import Config from '../Config';
+const Config = require('kuconf').Config;
 
 const conf = new Config({
   db: {
@@ -46,12 +46,22 @@ const conf = new Config({
   },
 });
 
-const config: any = conf.getConfig();
+const config = conf.getConfig();
 
 console.log( config.db.userName === config.db.username ); // true
-console.log(conf.validate()); // Error: {"errors":{"redis.host":["The redis.host field is required."]}}
-console.log(conf.validate(config.db)); // no errors
-console.log(conf.validate(config.redis)); // Error: {"errors":{"redis.host":["The redis.host field is required."]}}
+try {
+  conf.validate();
+} catch (e) {
+  console.log(e.message); // {"errors":{"redis.host":["The redis.host field is required."]}}
+}
+conf.validate(config.db); // no errors
+
+try {
+  conf.validate(config.redis);
+} catch (e) {
+  console.log(e.message); // {"errors":{"redis.host":["The redis.host field is required."]}}
+}
+
 ```
 
 # Parsers
