@@ -1,18 +1,18 @@
 # Config
 
-  - case-insensitive by default
-  - support validation
-  - support partial validation
+  - **case-insensitive by default**
+  - **support validation**
+  - **support partial validation**
 
 ```
   constructor(config: object, options?: Partial<IConfigOptions>) {
 ```
 
   - options:
-    - caseSensitive - default false
-    - validation - object { rules } - rules should be valid ValidatorJs rules
-    - get - default { allowed: false, separator: '.' }, allow get config like `cong.get('db.userName')`
-    - logger - TBD, api in progress
+    - **caseSensitive** - default false
+    - **validation** - object { rules } - rules should be valid ValidatorJs rules
+    - **get** - default { allowed: false, separator: '.' }, allow get config like `cong.get('db.userName')`
+    - **logger** - TBD, api in progress
 
 example
 ```
@@ -56,11 +56,11 @@ console.log(conf.validate(config.redis)); // Error: {"errors":{"redis.host":["Th
 ```
 
   - params:
-    - prefix - default empty
-    - delimiter - default '__'
-    - ignoreOneLodash - if want user case-insensitive config object, it may be useful just remove remove all '_' from key CLIENT_NAME => CLIENTNAME
-    - lower - all keys will be in lower case
-    - format - format key function `key => newFormatedKey`, if defined params ignoreOneLodash and lower will be ignored
+    - **prefix** - default empty
+    - **delimiter** - default '__'
+    - **ignoreOneLodash** - if want user case-insensitive config object, it may be useful just remove remove all '_' from key CLIENT_NAME => CLIENTNAME
+    - **lower** - all keys will be in lower case
+    - **format** - format key function `key => newFormatedKey`, if defined params ignoreOneLodash and lower will be ignored
 
 
 example
