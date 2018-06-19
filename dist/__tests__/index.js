@@ -3,6 +3,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const _ = require("lodash");
 const Config_1 = require("../Config");
+const EnvParser_1 = require("../parsers/EnvParser");
 // db
 process.env.TEST__DB__USERNAME = 'username';
 process.env.TEST__DB__PASSWORD = 'password';
@@ -24,51 +25,57 @@ process.env.TEST__REDIS__SENTINELS__0__TEST = 'TEST';
 process.env.TEST__REDIS__SENTINELS__1__HOST = 'localhost';
 process.env.TEST__REDIS__SENTINELS__1__PORT = '26379';
 process.env.TEST__REDIS__SENTINELS__1__TEST = 'true';
-const conf = new Config_1.default({
-    db: {
-        database: 'string',
-        host: 'required_with:db|string',
-        password: 'string',
-        port: 'integer',
-        replication: {
-            read: {
-                '*.host': 'string',
-                '*.password': 'string',
-                '*.port': 'integer',
-                '*.username': 'string',
-            },
-            write: {
-                host: 'string',
+const conf = new Config_1.default((new EnvParser_1.default({
+    prefix: 'TEST__',
+})).get(), {
+    caseSensitive: true,
+    get: {
+        allowed: true,
+        separator: ':',
+    },
+    validation: {
+        rules: {
+            db: {
+                database: 'string',
+                host: 'required_with:db|string',
                 password: 'string',
-                port: 'number',
+                port: 'integer',
+                replication: {
+                    read: {
+                        '*.host': 'string',
+                        '*.password': 'string',
+                        '*.port': 'integer',
+                        '*.username': 'string',
+                    },
+                    write: {
+                        host: 'string',
+                        password: 'string',
+                        port: 'number',
+                        username: 'string',
+                    },
+                },
                 username: 'string',
             },
+            redis: {
+                host: 'string',
+                port: 'integer',
+                sentinels: {
+                    '*.host': 'string',
+                    '*.port': 'integer',
+                    '*.test': 'required|bool|cast:boolean,false',
+                },
+            },
         },
-        username: 'string',
     },
-    redis: {
-        host: 'string',
-        port: 'integer',
-        sentinels: {
-            '*.host': 'string',
-            '*.port': 'integer',
-            '*.test': 'required|bool|cast:boolean,false',
-        },
-    },
-}, {
-    allowGet: true,
-    getSeparator: ':',
-    logger: console,
 });
 const config = conf
-    .parseEnv({ prefix: 'TEST__' })
     // .validate()
     .getConfig();
 function memUsed() {
     const used = process.memoryUsage().heapUsed / 1024 / 1024;
     console.log(`The script uses approximately ${Math.round(used * 100) / 100} MB`);
 }
-console.log(conf.generateEnv());
+// console.log(conf.generateEnv());
 console.log('config', config);
 const testArr = [];
 const items = 100000;

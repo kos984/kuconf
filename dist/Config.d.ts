@@ -1,23 +1,27 @@
 /// <reference types="validatorjs" />
 import ProxyHandler from './ProxyHandler';
-import { IConfigOptions, IGenerateEnvParams, ILogger, IOmitNotValidatedProps, IParseEnvParams } from './types';
+import { IConfigOptions, ILogger } from './types';
 import Validator from './Validator';
+declare const privateStoreKey: unique symbol;
 export default class Config<ConfigSchema> {
     /** ValidatorJs rules */
-    schema: any;
+    protected config: object;
+    protected configObject: ConfigSchema;
     protected handler: ProxyHandler;
     protected logger: ILogger;
     protected validation: Validator.Validator<any>;
-    protected parsedKeyPaths: string[];
-    protected config: ConfigSchema;
     protected options: IConfigOptions;
-    constructor(schema: object, options?: IConfigOptions);
+    protected [privateStoreKey]: Map<any, any>;
+    constructor(config: object, options?: Partial<IConfigOptions>);
+    merge(obj: Partial<ConfigSchema>): Config<ConfigSchema>;
     get(path: string, defaultValue?: any): any;
-    parseEnv(params?: IParseEnvParams): this;
-    validate(confPart?: any): this;
-    omitNotValidatedProps(params: IOmitNotValidatedProps): this;
     getConfig(): ConfigSchema;
-    generateEnv(params?: IGenerateEnvParams): string[];
-    getErrorsForPath(path?: string): any;
+    validate(confPart?: any): this;
+    getValidationErrors(path?: string): any;
     protected initValidator(): void;
+    protected objectToLower(obj: any): any;
+    protected prepareRules(schema: any): {
+        [key: string]: string;
+    };
 }
+export {};

@@ -6,21 +6,28 @@ export interface ILogger {
   log(...args: any[]): any;
   warn(...args: any[]): any;
 }
+export interface IProxyHandlerOptions {
+  caseSensitive: boolean;
+}
 export interface IConfigOptions {
-  allowGet: boolean;
-  getSeparator: string;
+  /** @default false */
+  caseSensitive?: boolean;
+  /** @default null */
+  validation?: {
+    rules: object;
+  };
+  get: {
+    /** @default false */
+    allowed: boolean;
+    /** @default . */
+    separator: string;
+  };
+  /** @default console */
   logger: ILogger;
 }
-export interface IParseEnvParams {
-  /** empty by default */
-  prefix?: string;
-  /** __ by default */
-  delimiter?: string;
-  /** if true will replace all '_' to '', false by default */
-  ignoreOneLodash?: boolean;
-  doNotWarnIfKeyOverridden?: boolean;
-}
 
+// tslint:disable-next-line:no-suspicious-comment
+// TODO: delete this
 export interface IGenerateEnvParams {
   /** empty by default */
   prefix?: string;
@@ -28,6 +35,8 @@ export interface IGenerateEnvParams {
   delimiter?: string;
 }
 
+// tslint:disable-next-line:no-suspicious-comment
+// TODO: need to implement
 export interface IOmitNotValidatedProps {
   /** true by default */
   logOmitted: boolean;

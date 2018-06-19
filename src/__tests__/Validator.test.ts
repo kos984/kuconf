@@ -1,4 +1,5 @@
 import Validator, { ECastType, ERule } from '../Validator';
+
 describe('Validator', () => {
 
   it(`rule: ${ERule.Bool}`, () => {
