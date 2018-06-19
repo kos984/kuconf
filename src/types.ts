@@ -26,6 +26,7 @@ export interface IConfigOptions {
   logger: ILogger;
 }
 
+// tslint:disable-next-line:no-suspicious-comment
 // TODO: delete this
 export interface IGenerateEnvParams {
   /** empty by default */
@@ -34,6 +35,7 @@ export interface IGenerateEnvParams {
   delimiter?: string;
 }
 
+// tslint:disable-next-line:no-suspicious-comment
 // TODO: need to implement
 export interface IOmitNotValidatedProps {
   /** true by default */

@@ -1,9 +1,7 @@
 import * as _ from 'lodash';
 import ProxyHandler, { validate as partialValidate } from './ProxyHandler';
-import { IConfigOptions, IGenerateEnvParams, ILogger, IOmitNotValidatedProps } from './types';
+import { IConfigOptions, ILogger } from './types';
 import Validator from './Validator';
-
-// FIXME: fix logger
 
 const privateStoreKey = Symbol('config');
 
