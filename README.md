@@ -5,7 +5,7 @@
   - **support partial validation**
 
 ```
-  constructor(config: object, options?: Partial<IConfigOptions>) {
+  constructor(config: object, options?: Partial<IConfigOptions>);
 ```
 
   - options:

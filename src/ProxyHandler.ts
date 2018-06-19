@@ -1,4 +1,5 @@
 import Config from './Config';
+import { IProxyHandlerOptions } from './types';
 
 export const validate = Symbol('validate'); // move to Config constructor ?
 export const rulesPath = Symbol('rulesPath');
@@ -8,11 +9,13 @@ export default class ProxyHandler {
   protected proxy = Symbol('proxy');
   protected hiddenProps: Map<any, boolean> = new Map();
   protected cache: Map<object, {proxy: any, rules: any}> = new Map();
+  protected options: IProxyHandlerOptions;
 
-  public constructor(protected config: Config<any>) {
+  public constructor(protected config: Config<any>, options: IProxyHandlerOptions) {
     this.hiddenProps.set(this.proxy, true);
     this.hiddenProps.set(validate, true);
     this.hiddenProps.set(rulesPath, true);
+    this.options = options;
   }
 
   public get(target: any, name: any) {
@@ -22,7 +25,7 @@ export default class ProxyHandler {
     if (typeof name !== 'string') {
       return target[name];
     }
-    const value = target[name.toLowerCase()];
+    const value = target[this.options.caseSensitive ? name : name.toLowerCase()];
     if (!value || typeof value !== 'object') {
       return value;
     }
@@ -40,7 +43,7 @@ export default class ProxyHandler {
   }
 
   public getOwnPropertyDescriptor(target: any, name: string | any) {
-    const path = typeof name === 'string' ? name.toLowerCase() : name;
+    const path = typeof name === 'string' && this.options.caseSensitive ? name.toLowerCase() : name;
     return Object.getOwnPropertyDescriptor(target, path);
   }
 

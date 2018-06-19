@@ -1,6 +1,95 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Config config should be correct 1`] = `
+exports[` 1`] = `
+Object {
+  "database": "test",
+  "host": "localhost",
+  "password": "password",
+  "port": 3306,
+  "replication": Object {
+    "read": Array [
+      Object {
+        "host": "read0.example.com",
+        "password": "password_read_0",
+        "username": "username_read_0",
+      },
+      Object {
+        "host": "read1.example.com",
+        "password": "password_read_1",
+        "username": "username_read_1",
+      },
+    ],
+    "write": Object {
+      "host": "write.example.com",
+      "password": "password_write",
+      "username": "username_write",
+    },
+  },
+  "username": "username",
+}
+`;
+
+exports[` 2`] = `
+Object {
+  "database": "test",
+  "host": "localhost",
+  "password": "password",
+  "port": 3306,
+  "replication": Object {
+    "read": Array [
+      Object {
+        "host": "read0.example.com",
+        "password": "password_read_0",
+        "username": "username_read_0",
+      },
+      Object {
+        "host": "read1.example.com",
+        "password": "password_read_1",
+        "username": "username_read_1",
+      },
+    ],
+    "write": Object {
+      "host": "write.example.com",
+      "password": "password_write",
+      "username": "username_write",
+    },
+  },
+  "username": "username",
+}
+`;
+
+exports[`Config [default settings] [options] caseSensitive config should be case-sensitive 1`] = `
+Object {
+  "database": "test",
+  "host": "localhost",
+  "password": "password",
+  "port": 3306,
+  "replication": Object {
+    "read": Array [
+      Object {
+        "host": "read0.example.com",
+        "password": "password_read_0",
+        "username": "username_read_0",
+      },
+      Object {
+        "host": "read1.example.com",
+        "password": "password_read_1",
+        "username": "username_read_1",
+      },
+    ],
+    "write": Object {
+      "host": "write.example.com",
+      "password": "password_write",
+      "username": "username_write",
+    },
+  },
+  "username": "username",
+}
+`;
+
+exports[`Config [default settings] [options] get false conf.get should not allow get 1`] = `"get is not allowed"`;
+
+exports[`Config [default settings] [options] validation config should be correct 1`] = `
 Object {
   "db": Object {
     "database": "test",
@@ -45,9 +134,9 @@ Object {
 }
 `;
 
-exports[`Config root validations should not pass 1`] = `"{\\"errors\\":{\\"redis.sentinels.0.test\\":[\\"The redis.sentinels.0.test must be a true or false\\"]}}"`;
+exports[`Config [default settings] [options] validation root validations should not pass 1`] = `"{\\"errors\\":{\\"redis.sentinels.0.test\\":[\\"The redis.sentinels.0.test must be a true or false\\"]}}"`;
 
-exports[`Config rules should be parsed 1`] = `
+exports[`Config [default settings] [options] validation rules should be parsed 1`] = `
 Object {
   "db.database": Array [
     Object {
@@ -211,8 +300,8 @@ Object {
 }
 `;
 
-exports[`Config validation redis should throw error 1`] = `"only objects allowed for validation"`;
+exports[`Config [default settings] [options] validation validation redis should throw error 1`] = `"only objects allowed for validation"`;
 
-exports[`Config validation redis.host should throw error 1`] = `"only objects allowed for validation"`;
+exports[`Config [default settings] [options] validation validation redis.host should throw error 1`] = `"only objects allowed for validation"`;
 
-exports[`Config validation redis.sentinels[0] should throw error 1`] = `"{\\"errors\\":{\\"redis.sentinels.0.test\\":[\\"The redis.sentinels.0.test must be a true or false\\"]}}"`;
+exports[`Config [default settings] [options] validation validation redis.sentinels[0] should throw error 1`] = `"{\\"errors\\":{\\"redis.sentinels.0.test\\":[\\"The redis.sentinels.0.test must be a true or false\\"]}}"`;

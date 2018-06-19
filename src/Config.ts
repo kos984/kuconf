@@ -15,7 +15,7 @@ export default class Config<ConfigSchema> {
   protected config: object = {};
   protected configObject: ConfigSchema = {} as ConfigSchema;
 
-  protected handler = new ProxyHandler(this);
+  protected handler: ProxyHandler;
   protected logger: ILogger;
   protected validation: Validator.Validator<any>;
   // protected parsedKeyPaths: string[] = [];
@@ -35,6 +35,7 @@ export default class Config<ConfigSchema> {
       validation: null,
       ...options};
     this.logger = this.options.logger;
+    this.handler = new ProxyHandler(this, { caseSensitive: this.options.caseSensitive });
   }
 
   /**
@@ -42,7 +43,6 @@ export default class Config<ConfigSchema> {
    */
   public add(path: string, config: object) {
     // FIXME: implement
-
   }
 
   public get(path: string, defaultValue?: any) {
@@ -96,11 +96,9 @@ export default class Config<ConfigSchema> {
     if (!this.options.validation || this.validation) {
       return;
     }
-    // FIXME: need own validator, exists it not correct
     this.validation = new Validator(this.config, this.prepareRules(this.options.validation.rules));
-    // all rules should be in lower case, because we use set in validator
     Object.keys(this.validation.rules).forEach( key => {
-      const newKey = key.toLowerCase();
+      const newKey = this.options.caseSensitive ? key : key.toLowerCase();
       if (key !== newKey) {
         this.validation.rules[newKey] = this.validation.rules[key];
         delete this.validation.rules[key];

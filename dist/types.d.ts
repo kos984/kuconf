@@ -5,6 +5,9 @@ export interface ILogger {
     log(...args: any[]): any;
     warn(...args: any[]): any;
 }
+export interface IProxyHandlerOptions {
+    caseSensitive: boolean;
+}
 export interface IConfigOptions {
     /** @default false */
     caseSensitive?: boolean;

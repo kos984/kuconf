@@ -6,55 +6,94 @@ import EnvParser from '../../parsers/EnvParser';
 import { IConfig } from './types';
 import rules from './validationRules';
 
-describe('Config', () => {
-  const conf = new Config<IConfig>(
-    (new EnvParser({ prefix: 'TEST__' })).get(),
-    {
-      get: {
-        allowed: true,
-        separator: ':',
-      },
-      validation: {
-        rules,
-      },
-    },
-  );
-  const config = conf.getConfig();
+const prefix = 'TEST__';
 
-  it ('rules should be parsed', () => {
-    expect((conf as any).validation.rules).toMatchSnapshot();
+describe('Config [default settings]', () => {
+
+  describe('[options] caseSensitive', () => {
+    it('config should be case-insensitive', () => {
+      const envParser = new EnvParser({ prefix });
+      const conf = new Config<IConfig>(envParser.get(), {
+        validation: { rules },
+      });
+      const config = conf.getConfig();
+      const c: any = config;
+      expect(config.db === c.DB).toBeTruthy();
+      expect(config.db.username === c.db.UserName).toBeTruthy();
+      expect(config.db.database === c.db.dataBase).toBeTruthy();
+    });
+    it('config should be case-sensitive', () => {
+      const envParser = new EnvParser({ prefix, lower: true });
+      const conf = new Config<IConfig>(envParser.get(), {
+        caseSensitive: true,
+        validation: { rules },
+      });
+      const config = conf.getConfig();
+      expect(config.db).toMatchSnapshot();
+      expect((config as any).DB).not.toBeDefined();
+    });
   });
-  it ('config should be correct', () => {
-    expect(config).toMatchSnapshot();
+  describe('[options] validation', () => {
+    const envParser = new EnvParser({ prefix });
+    const conf = new Config<IConfig>(envParser.get(), {
+      validation: { rules },
+    });
+    const config = conf.getConfig();
+    it ('rules should be parsed', () => {
+      expect((conf as any).validation.rules).toMatchSnapshot();
+    });
+    it ('config should be correct', () => {
+      expect(config).toMatchSnapshot();
+    });
+    it ('root validations should not pass', () => {
+      expect(() => conf.validate()).toThrowErrorMatchingSnapshot();
+    });
+    it('db validation should not throw errors', () => {
+      expect(() => conf.validate(config.db)).not.toThrowError();
+    });
+    it('validation redis should throw error', () => {
+      expect(() => conf.validate(config.redis.host)).toThrowErrorMatchingSnapshot();
+    });
+    it('validation redis.host should throw error', () => {
+      expect(() => conf.validate(config.redis.host)).toThrowErrorMatchingSnapshot();
+    });
+    it('validation redis.sentinels[0] should throw error', () => {
+      expect(() => conf.validate(config.redis.sentinels[0])).toThrowErrorMatchingSnapshot();
+    });
+    it('validation redis.sentinels[1] should pass', () => {
+      expect(() => conf.validate(config.redis.sentinels[1])).not.toThrowError();
+    });
   });
-  it ('root validations should not pass', () => {
-    expect(() => conf.validate()).toThrowErrorMatchingSnapshot();
-  });
-  it('db validation should not throw errors', () => {
-    expect(() => conf.validate(config.db)).not.toThrowError();
-  });
-  it('validation redis should throw error', () => {
-    expect(() => conf.validate(config.redis.host)).toThrowErrorMatchingSnapshot();
-  });
-  it('validation redis.host should throw error', () => {
-    expect(() => conf.validate(config.redis.host)).toThrowErrorMatchingSnapshot();
-  });
-  it('validation redis.sentinels[0] should throw error', () => {
-    expect(() => conf.validate(config.redis.sentinels[0])).toThrowErrorMatchingSnapshot();
-  });
-  it('validation redis.sentinels[1] should pass', () => {
-    expect(() => conf.validate(config.redis.sentinels[1])).not.toThrowError();
-  });
-  it('config should be case-insensitive', () => {
-    const c: any = config;
-    expect(config.db === c.DB).toBeTruthy();
-    expect(config.db.username === c.db.UserName).toBeTruthy();
-    expect(config.db.database === c.db.dataBase).toBeTruthy();
-  });
-  it('lodash get should works', () => {
-    expect(config.db.replication.write === _.get(config, 'db.replication.write'));
-  });
-  it('conf.get should works', () => {
-    expect(config.db.replication.write === conf.get('db.replication.write'));
+
+  describe('[options] get', () => {
+    const envParser = new EnvParser({ prefix, lower: true });
+    describe('true', () => {
+      const conf = new Config<IConfig>(envParser.get(), {
+        get: { allowed: true, separator: ':' },
+        validation: { rules },
+      });
+      const config = conf.getConfig();
+      expect(config.db).toMatchSnapshot();
+      it('conf.get should works', () => {
+        expect(config.db.replication.write === conf.get('db:replication:write')).toBeTruthy();
+        expect(config.db.replication.write === conf.get('db.replication.write')).toBeTruthy();
+      });
+      it('lodash get should works', () => {
+        expect(config.db.replication.write === _.get(config, 'db.replication.write'));
+      });
+    });
+    describe('false', () => {
+      const conf = new Config<IConfig>(envParser.get(), {
+        validation: { rules },
+      });
+      const config = conf.getConfig();
+      expect(config.db).toMatchSnapshot();
+      it('conf.get should not allow get', () => {
+        expect(() => conf.get('db:replication:write')).toThrowErrorMatchingSnapshot();
+      });
+      it('lodash get should works', () => {
+        expect(config.db.replication.write === _.get(config, 'db.replication.write'));
+      });
+    });
   });
 });

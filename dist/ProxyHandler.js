@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.validate = Symbol('validate'); // move to Config constructor ?
 exports.rulesPath = Symbol('rulesPath');
 class ProxyHandler {
-    constructor(config) {
+    constructor(config, options) {
         this.config = config;
         this.proxy = Symbol('proxy');
         this.hiddenProps = new Map();
@@ -11,6 +11,7 @@ class ProxyHandler {
         this.hiddenProps.set(this.proxy, true);
         this.hiddenProps.set(exports.validate, true);
         this.hiddenProps.set(exports.rulesPath, true);
+        this.options = options;
     }
     get(target, name) {
         if (name === exports.validate) {
@@ -19,7 +20,7 @@ class ProxyHandler {
         if (typeof name !== 'string') {
             return target[name];
         }
-        const value = target[name.toLowerCase()];
+        const value = target[this.options.caseSensitive ? name : name.toLowerCase()];
         if (!value || typeof value !== 'object') {
             return value;
         }
@@ -36,7 +37,7 @@ class ProxyHandler {
         return proxyValue;
     }
     getOwnPropertyDescriptor(target, name) {
-        const path = typeof name === 'string' ? name.toLowerCase() : name;
+        const path = typeof name === 'string' && this.options.caseSensitive ? name.toLowerCase() : name;
         return Object.getOwnPropertyDescriptor(target, path);
     }
     [exports.validate](target) {
