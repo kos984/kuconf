@@ -92,4 +92,15 @@ describe('Config [default settings]', () => {
             });
         });
     });
+    describe('merge', () => {
+        const envParser = new EnvParser_1.default({ prefix });
+        const conf = new Config_1.default(envParser.get(), {
+            validation: { rules: validationRules_1.default },
+        });
+        conf.merge({ db: { port: 777 } });
+        const config = conf.getConfig();
+        expect(config).toMatchSnapshot();
+        conf.merge({ db: { port: '7777' } });
+        expect(config).toMatchSnapshot();
+    });
 });

@@ -3,16 +3,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const _ = require("lodash");
 const ProxyHandler_1 = require("./ProxyHandler");
 const Validator_1 = require("./Validator");
-// FIXME: fix logger
 const privateStoreKey = Symbol('config');
 class Config {
     constructor(config, options) {
         /** ValidatorJs rules */
         // public schema: any = {};
         this.config = {};
-        this.configObject = {};
-        this.config = config;
-        // this.schema = this.prepareRules(schema);
         this.options = {
             get: {
                 allowed: false,
@@ -23,13 +19,15 @@ class Config {
             ...options
         };
         this.logger = this.options.logger;
+        this.config = this.options.caseSensitive ? config : this.objectToLower(config);
         this.handler = new ProxyHandler_1.default(this, { caseSensitive: this.options.caseSensitive });
     }
-    /**
-     * allowed only before getConfig;
-     */
-    add(path, config) {
-        // FIXME: implement
+    merge(obj) {
+        this.config = _.merge(this.config, this.options.caseSensitive ? obj : this.objectToLower(obj));
+        // reset validation;
+        this.validation = null;
+        this.initValidator();
+        return this;
     }
     get(path, defaultValue) {
         if (!this.options.get.allowed) {
@@ -40,8 +38,12 @@ class Config {
         return _.get(config, path, defaultValue);
     }
     getConfig() {
+        if (this.configObject) {
+            return this.configObject;
+        }
         this.initValidator();
-        return new Proxy(this.config, this.handler);
+        this.configObject = new Proxy(this.config, this.handler);
+        return this.configObject;
     }
     validate(confPart) {
         this.initValidator();
@@ -118,6 +120,20 @@ class Config {
     }
   
     */
+    objectToLower(obj) {
+        if (Array.isArray(obj)) {
+            return obj.map(o => this.objectToLower(o));
+        }
+        else if (typeof obj === 'object') {
+            const result = {};
+            Object.keys(obj).forEach((key) => {
+                const value = this.objectToLower(obj[key]);
+                result[typeof key === 'string' ? key.toLowerCase() : key] = value;
+            });
+            return result;
+        }
+        return obj;
+    }
     prepareRules(schema) {
         const result = {};
         const parse = (obj, start) => {

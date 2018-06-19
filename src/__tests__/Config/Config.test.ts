@@ -96,4 +96,16 @@ describe('Config [default settings]', () => {
       });
     });
   });
+
+  describe('merge', () => {
+    const envParser = new EnvParser({ prefix });
+    const conf = new Config<IConfig>(envParser.get(), {
+      validation: { rules },
+    });
+    conf.merge({ db: { port: 777 } as any});
+    const config = conf.getConfig();
+    expect(config).toMatchSnapshot();
+    conf.merge({ db: { port: '7777' } as any});
+    expect(config).toMatchSnapshot();
+  });
 });

@@ -13,6 +13,13 @@
     - **validation** - object { rules } - rules should be valid ValidatorJs rules
     - **get** - default { allowed: false, separator: '.' }, allow get config like `cong.get('db.userName')`
     - **logger** - TBD, api in progress
+  
+  - methods:
+     - `public merge(obj: Partial<ConfigSchema>): Config<ConfigSchema>`
+     - `public get(path: string, defaultValue?: any)` - return config value
+     - `public getConfig(): ConfigSchema` - return config object
+     - `public validate(confPart?: any)` - @throws Error
+     - `public getValidationErrors(path?: string): TBD`
 
 example
 ```

@@ -11,7 +11,7 @@ export default class Config<ConfigSchema> {
   // public schema: any = {};
 
   protected config: object = {};
-  protected configObject: ConfigSchema = {} as ConfigSchema;
+  protected configObject: ConfigSchema;
 
   protected handler: ProxyHandler;
   protected logger: ILogger;
@@ -22,8 +22,6 @@ export default class Config<ConfigSchema> {
   protected [privateStoreKey]: Map<any, any>;
 
   constructor(config: object, options?: Partial<IConfigOptions>) {
-    this.config = config;
-    // this.schema = this.prepareRules(schema);
     this.options = {
       get: {
         allowed: false,
@@ -33,14 +31,16 @@ export default class Config<ConfigSchema> {
       validation: null,
       ...options};
     this.logger = this.options.logger;
+    this.config = this.options.caseSensitive ? config : this.objectToLower(config);
     this.handler = new ProxyHandler(this, { caseSensitive: this.options.caseSensitive });
   }
 
-  /**
-   * allowed only before getConfig;
-   */
-  public add(path: string, config: object) {
-    // FIXME: implement
+  public merge(obj: Partial<ConfigSchema>): Config<ConfigSchema> {
+    this.config = _.merge(this.config, this.options.caseSensitive ? obj : this.objectToLower(obj));
+    // reset validation;
+    this.validation = null;
+    this.initValidator();
+    return this;
   }
 
   public get(path: string, defaultValue?: any) {
@@ -53,8 +53,12 @@ export default class Config<ConfigSchema> {
   }
 
   public getConfig(): ConfigSchema {
+    if (this.configObject) {
+      return this.configObject;
+    }
     this.initValidator();
-    return new Proxy(this.config as any, this.handler);
+    this.configObject = new Proxy(this.config as any, this.handler);
+    return this.configObject;
   }
 
   public validate(confPart?: any) {
@@ -135,6 +139,20 @@ export default class Config<ConfigSchema> {
   }
 
   */
+
+  protected objectToLower(obj: any): any {
+    if (Array.isArray(obj)) {
+      return obj.map(o => this.objectToLower(o));
+    } else if (typeof obj === 'object') {
+      const result: any = {};
+      Object.keys(obj).forEach((key: string) => {
+        const value = this.objectToLower(obj[key]);
+        result[typeof key === 'string' ? key.toLowerCase() : key] = value;
+      });
+      return result;
+    }
+    return obj;
+  }
 
   protected prepareRules(schema: any) {
     const result: { [key: string]: string } = {};

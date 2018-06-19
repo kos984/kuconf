@@ -58,6 +58,96 @@ Object {
 }
 `;
 
+exports[` 3`] = `
+Object {
+  "db": Object {
+    "database": "test",
+    "host": "localhost",
+    "password": "password",
+    "port": 777,
+    "replication": Object {
+      "read": Array [
+        Object {
+          "host": "read0.example.com",
+          "password": "password_read_0",
+          "username": "username_read_0",
+        },
+        Object {
+          "host": "read1.example.com",
+          "password": "password_read_1",
+          "username": "username_read_1",
+        },
+      ],
+      "write": Object {
+        "host": "write.example.com",
+        "password": "password_write",
+        "username": "username_write",
+      },
+    },
+    "username": "username",
+  },
+  "redis": Object {
+    "sentinels": Array [
+      Object {
+        "host": "localhost",
+        "port": "26379",
+        "test": false,
+      },
+      Object {
+        "host": "localhost",
+        "port": "26379",
+        "test": true,
+      },
+    ],
+  },
+}
+`;
+
+exports[` 4`] = `
+Object {
+  "db": Object {
+    "database": "test",
+    "host": "localhost",
+    "password": "password",
+    "port": 7777,
+    "replication": Object {
+      "read": Array [
+        Object {
+          "host": "read0.example.com",
+          "password": "password_read_0",
+          "username": "username_read_0",
+        },
+        Object {
+          "host": "read1.example.com",
+          "password": "password_read_1",
+          "username": "username_read_1",
+        },
+      ],
+      "write": Object {
+        "host": "write.example.com",
+        "password": "password_write",
+        "username": "username_write",
+      },
+    },
+    "username": "username",
+  },
+  "redis": Object {
+    "sentinels": Array [
+      Object {
+        "host": "localhost",
+        "port": "26379",
+        "test": false,
+      },
+      Object {
+        "host": "localhost",
+        "port": "26379",
+        "test": true,
+      },
+    ],
+  },
+}
+`;
+
 exports[`Config [default settings] [options] caseSensitive config should be case-sensitive 1`] = `
 Object {
   "database": "test",

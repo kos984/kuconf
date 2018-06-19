@@ -13,15 +13,13 @@ export default class Config<ConfigSchema> {
     protected options: IConfigOptions;
     protected [privateStoreKey]: Map<any, any>;
     constructor(config: object, options?: Partial<IConfigOptions>);
-    /**
-     * allowed only before getConfig;
-     */
-    add(path: string, config: object): void;
+    merge(obj: Partial<ConfigSchema>): Config<ConfigSchema>;
     get(path: string, defaultValue?: any): any;
     getConfig(): ConfigSchema;
     validate(confPart?: any): this;
     getValidationErrors(path?: string): any;
     protected initValidator(): void;
+    protected objectToLower(obj: any): any;
     protected prepareRules(schema: any): {
         [key: string]: string;
     };
