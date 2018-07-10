@@ -64,6 +64,9 @@ class Config {
         if (!path) {
             return this.validation.errors;
         }
+        else if (!this.options.caseSensitive) {
+            path = path.toLowerCase();
+        }
         const result = {
             errors: {},
         };

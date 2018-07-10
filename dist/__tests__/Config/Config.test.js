@@ -51,6 +51,9 @@ describe('Config [default settings]', () => {
         it('validation redis should throw error', () => {
             expect(() => conf.validate(config.redis.host)).toThrowErrorMatchingSnapshot();
         });
+        it('validation case isensitive should return errors', () => {
+            expect(conf.getValidationErrors('features.featureName')).toMatchSnapshot();
+        });
         it('validation redis.host should throw error', () => {
             expect(() => conf.validate(config.redis.host)).toThrowErrorMatchingSnapshot();
         });

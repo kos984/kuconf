@@ -80,6 +80,8 @@ export default class Config<ConfigSchema> {
     }
     if (!path) {
       return this.validation.errors;
+    } else if (!this.options.caseSensitive) {
+      path = path.toLowerCase();
     }
     const result: any = {
       errors: {},

@@ -29,4 +29,10 @@ export interface IConfig {
       }>;
     };
   };
+  features: {
+    featureName: {
+      enabled: boolean;
+      key: string;
+    };
+  };
 }

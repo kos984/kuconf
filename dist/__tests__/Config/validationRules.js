@@ -22,6 +22,12 @@ const rules = {
         },
         username: 'string',
     },
+    features: {
+        featureName: {
+            enabled: 'bool|cast:boolean,false',
+            key: 'required|string',
+        },
+    },
     redis: {
         host: 'string',
         port: 'integer',

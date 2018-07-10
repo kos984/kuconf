@@ -86,6 +86,11 @@ Object {
     },
     "username": "username",
   },
+  "features": Object {
+    "featurename": Object {
+      "enabled": false,
+    },
+  },
   "redis": Object {
     "sentinels": Array [
       Object {
@@ -130,6 +135,11 @@ Object {
       },
     },
     "username": "username",
+  },
+  "features": Object {
+    "featurename": Object {
+      "enabled": false,
+    },
   },
   "redis": Object {
     "sentinels": Array [
@@ -207,6 +217,11 @@ Object {
     },
     "username": "username",
   },
+  "features": Object {
+    "featurename": Object {
+      "enabled": false,
+    },
+  },
   "redis": Object {
     "sentinels": Array [
       Object {
@@ -224,7 +239,7 @@ Object {
 }
 `;
 
-exports[`Config [default settings] [options] validation root validations should not pass 1`] = `"{\\"errors\\":{\\"redis.sentinels.0.test\\":[\\"The redis.sentinels.0.test must be a true or false\\"]}}"`;
+exports[`Config [default settings] [options] validation root validations should not pass 1`] = `"{\\"errors\\":{\\"redis.sentinels.0.test\\":[\\"The redis.sentinels.0.test must be a true or false\\"],\\"features.featurename.key\\":[\\"The features.featurename.key field is required.\\"]}}"`;
 
 exports[`Config [default settings] [options] validation rules should be parsed 1`] = `
 Object {
@@ -333,6 +348,23 @@ Object {
       "name": "string",
     },
   ],
+  "features.featurename.enabled": Array [
+    Object {
+      "name": "bool",
+    },
+    Object {
+      "name": "cast",
+      "value": "boolean,false",
+    },
+  ],
+  "features.featurename.key": Array [
+    Object {
+      "name": "required",
+    },
+    Object {
+      "name": "string",
+    },
+  ],
   "redis.host": Array [
     Object {
       "name": "string",
@@ -387,6 +419,16 @@ Object {
       "value": "boolean,false",
     },
   ],
+}
+`;
+
+exports[`Config [default settings] [options] validation validation case isensitive should return errors 1`] = `
+Object {
+  "errors": Object {
+    "features.featurename.key": Array [
+      "The features.featurename.key field is required.",
+    ],
+  },
 }
 `;
 
