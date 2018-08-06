@@ -148,7 +148,7 @@ export default class Config<ConfigSchema> {
     } else if (typeof obj === 'object') {
       Object.keys(obj).forEach((key: string) => {
         const path = typeof key === 'string' ? key.toLowerCase() : key;
-        const value = this.objectToLower(obj[key], result[key] ? result[key] : {});
+        const value = this.objectToLower(obj[key], result[path] ? result[path] : {});
         result[path] = value;
       });
       return result;
