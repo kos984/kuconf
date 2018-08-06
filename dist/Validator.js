@@ -8,6 +8,7 @@ var ECastType;
     ECastType["Number"] = "number";
     ECastType["Boolean"] = "boolean";
     ECastType["Date"] = "Date";
+    ECastType["String"] = "string";
 })(ECastType = exports.ECastType || (exports.ECastType = {}));
 var ERule;
 (function (ERule) {
@@ -73,6 +74,10 @@ Validator.registerImplicit(ERule.Cast, function (value, input, path) {
         }
         case ECastType.Date: {
             value = new Date(value);
+            break;
+        }
+        case ECastType.String: {
+            value = value.toString();
             break;
         }
         default: {

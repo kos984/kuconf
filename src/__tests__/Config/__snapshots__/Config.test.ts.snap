@@ -365,6 +365,66 @@ Object {
       "name": "string",
     },
   ],
+  "queue.first.accesskeyid": Array [
+    Object {
+      "name": "string",
+    },
+  ],
+  "queue.first.endpoint": Array [
+    Object {
+      "name": "string",
+    },
+  ],
+  "queue.first.queuename": Array [
+    Object {
+      "name": "string",
+    },
+  ],
+  "queue.first.queueurl": Array [
+    Object {
+      "name": "string",
+    },
+  ],
+  "queue.first.region": Array [
+    Object {
+      "name": "string",
+    },
+  ],
+  "queue.first.secretaccesskey": Array [
+    Object {
+      "name": "string",
+    },
+  ],
+  "queue.second.accesskeyid": Array [
+    Object {
+      "name": "string",
+    },
+  ],
+  "queue.second.endpoint": Array [
+    Object {
+      "name": "string",
+    },
+  ],
+  "queue.second.queuename": Array [
+    Object {
+      "name": "string",
+    },
+  ],
+  "queue.second.queueurl": Array [
+    Object {
+      "name": "string",
+    },
+  ],
+  "queue.second.region": Array [
+    Object {
+      "name": "string",
+    },
+  ],
+  "queue.second.secretaccesskey": Array [
+    Object {
+      "name": "string",
+    },
+  ],
   "redis.host": Array [
     Object {
       "name": "string",

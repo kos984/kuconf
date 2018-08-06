@@ -1,4 +1,22 @@
 export interface IConfig {
+  queue: {
+    first: {
+      region: string;
+      accessKeyId: string;
+      secretAccessKey: string;
+      queueName: string;
+      endpoint?: string;
+      queueUrl?: string;
+    };
+    second: {
+      region: string;
+      accessKeyId: string;
+      secretAccessKey: string;
+      queueName: string;
+      endpoint?: string;
+      queueUrl?: string;
+    };
+  };
   redis: {
     host?: string;
     port?: number;

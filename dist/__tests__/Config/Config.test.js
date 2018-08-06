@@ -18,6 +18,7 @@ describe('Config [default settings]', () => {
             expect(config.db === c.DB).toBeTruthy();
             expect(config.db.username === c.db.UserName).toBeTruthy();
             expect(config.db.database === c.db.dataBase).toBeTruthy();
+            // expect(config.queue).toMatchSnapshot();
         });
         it('config should be case-sensitive', () => {
             const envParser = new EnvParser_1.default({ prefix, lower: true });

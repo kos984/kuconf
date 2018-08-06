@@ -19,7 +19,7 @@ export default class Config<ConfigSchema> {
     validate(confPart?: any): this;
     getValidationErrors(path?: string): any;
     protected initValidator(): void;
-    protected objectToLower(obj: any): any;
+    protected objectToLower(obj: any, result?: any): any;
     protected prepareRules(schema: any): {
         [key: string]: string;
     };

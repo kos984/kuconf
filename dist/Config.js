@@ -123,15 +123,15 @@ class Config {
     }
   
     */
-    objectToLower(obj) {
+    objectToLower(obj, result = {}) {
         if (Array.isArray(obj)) {
             return obj.map(o => this.objectToLower(o));
         }
         else if (typeof obj === 'object') {
-            const result = {};
             Object.keys(obj).forEach((key) => {
-                const value = this.objectToLower(obj[key]);
-                result[typeof key === 'string' ? key.toLowerCase() : key] = value;
+                const path = typeof key === 'string' ? key.toLowerCase() : key;
+                const value = this.objectToLower(obj[key], obj[key] ? obj[key] : {});
+                result[path] = value;
             });
             return result;
         }
