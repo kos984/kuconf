@@ -2,7 +2,8 @@ import * as Validator from 'validatorjs';
 export declare enum ECastType {
     Number = "number",
     Boolean = "boolean",
-    Date = "Date"
+    Date = "Date",
+    String = "string"
 }
 export declare enum ERule {
     Required = "required",

@@ -45,6 +45,7 @@ describe('Validator', () => {
       dateDefault: `${ERule.Date}|${ERule.Cast}:${ECastType.Date}:1999-12-31`,
       dateTimeDefault: `${ERule.Cast}:${ECastType.Date},1999-12-31T00:00:00`,
       numberDefault: `${ERule.Numeric}|${ERule.Cast}:${ECastType.Number},100`,
+      stringDefault: `${ERule.String}|${ERule.Cast}:${ECastType.String},default\,String`,
 
       // should not set if property not exists
       boolEmpty: `${ERule.Bool}|${ERule.Cast}:${ECastType.Boolean}`,

@@ -28,6 +28,24 @@ const rules = {
             key: 'required|string',
         },
     },
+    queue: {
+        first: {
+            accessKeyId: 'string',
+            endpoint: 'string',
+            queueName: 'string',
+            queueUrl: 'string',
+            region: 'string',
+            secretAccessKey: 'string',
+        },
+        second: {
+            accessKeyId: 'string',
+            endpoint: 'string',
+            queueName: 'string',
+            queueUrl: 'string',
+            region: 'string',
+            secretAccessKey: 'string',
+        },
+    },
     redis: {
         host: 'string',
         port: 'integer',

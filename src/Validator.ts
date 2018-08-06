@@ -6,6 +6,7 @@ export enum ECastType {
   Number = 'number',
   Boolean = 'boolean',
   Date = 'Date',
+  String = 'string',
 }
 
 export enum ERule {
@@ -83,6 +84,10 @@ Validator.register(
       }
       case ECastType.Date: {
         value = new Date(value);
+        break;
+      }
+      case ECastType.String: {
+        value = value.toString();
         break;
       }
       default: {
