@@ -18,22 +18,22 @@ export enum ERule {
   Max = 'max',
   Integer = 'integer',
   /** value should be strict equals 'true' or 'false' */
-  Bool = 'bool',
+  Bool = 'kuConfBool',
   /**
    * object should have properties only in listed values;
    * objectKeysIn:Y,N will check attrs: {a: 'Y', b: 'N'}
    */
-  ObjectKeysIn = 'objectKeysIn',
+  ObjectKeysIn = 'kuConfObjectKeysIn',
   /**
    * cast:ECastType,defaultValue
    *
    * @example
-   * const rules = { '*.age': 'numeric|cast:number,10' };
+   * const rules = { '*.age': `numeric|${ERule.Cast}:${ECastType.Number},10` };
    * const data = [{ age: '4' }, { name: 'test' }, { age: 5 }];
    *
    * @description should be last rule in the list, will not update inputValue
    */
-  Cast = 'cast',
+  Cast = 'kuConfCast',
 }
 
 Validator.register(
@@ -72,6 +72,9 @@ Validator.register(
       } else {
         return true;
       }
+    } else if (typeof value !== 'string') {
+      // cast string only
+      return true;
     }
     switch (type) {
       case ECastType.Number: {
@@ -103,7 +106,7 @@ Validator.register(
 // test cast
 {
   const data = [{ age: '4' }, { name: 'test' }, { age: 5 }];
-  const rules = { '*.age': 'numeric|cast:number' };
+  const rules = { '*.age': `numeric|${ERule.Cast}:${ECastType.Number}` };
   const validation = new Validator(data, rules);
   validation.passes(); // true
   assert.deepEqual(data, [{ age: 4 }, { name: 'test' }, { age: 5 }], 'Validator, cast rule is not works correctly');

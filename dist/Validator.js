@@ -20,12 +20,12 @@ var ERule;
     ERule["Max"] = "max";
     ERule["Integer"] = "integer";
     /** value should be strict equals 'true' or 'false' */
-    ERule["Bool"] = "bool";
+    ERule["Bool"] = "kuConfBool";
     /**
      * object should have properties only in listed values;
      * objectKeysIn:Y,N will check attrs: {a: 'Y', b: 'N'}
      */
-    ERule["ObjectKeysIn"] = "objectKeysIn";
+    ERule["ObjectKeysIn"] = "kuConfObjectKeysIn";
     /**
      * cast:ECastType,defaultValue
      *
@@ -35,7 +35,7 @@ var ERule;
      *
      * @description should be last rule in the list, will not update inputValue
      */
-    ERule["Cast"] = "cast";
+    ERule["Cast"] = "kuConfCast";
 })(ERule = exports.ERule || (exports.ERule = {}));
 Validator.register(ERule.Bool, (value) => {
     return typeof value === 'boolean' || value === 'true' || value === 'false';
@@ -62,6 +62,10 @@ Validator.registerImplicit(ERule.Cast, function (value, input, path) {
         else {
             return true;
         }
+    }
+    else if (typeof value !== 'string') {
+        // cast string only
+        return true;
     }
     switch (type) {
         case ECastType.Number: {

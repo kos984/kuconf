@@ -3,6 +3,7 @@
 import * as _ from 'lodash';
 import Config from '../Config';
 import EnvParser from '../parsers/EnvParser';
+import { ECastType, ERule } from '../Validator';
 
 // db
 process.env.TEST__DB__USERNAME = 'username';
@@ -98,7 +99,7 @@ const conf = new Config<{
         sentinels: {
           '*.host': 'string',
           '*.port': 'integer',
-          '*.test': 'required|bool|cast:boolean,false',
+          '*.test': `required|${ERule.Bool}|${ERule.Cast}:${ECastType.Boolean},false`,
         },
       },
     },
