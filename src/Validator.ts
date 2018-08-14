@@ -57,7 +57,7 @@ Validator.register(
     }
     return true;
   },
-  'The :attribute keys should be in :objectKeysIn',
+  `The :attribute keys should be in :${ERule.ObjectKeysIn}`,
 );
 
 /** should be last rule in a queue, will not update inputValue */

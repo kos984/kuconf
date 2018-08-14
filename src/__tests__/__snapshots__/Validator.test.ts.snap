@@ -40,10 +40,10 @@ exports[`Validator rule: kuConfObjectKeysIn 1`] = `
 Errors {
   "errors": Object {
     "arr.2": Array [
-      "The arr.2 keys should be in :objectKeysIn",
+      "The arr.2 keys should be in Y,N",
     ],
     "arr.3": Array [
-      "The arr.3 keys should be in :objectKeysIn",
+      "The arr.3 keys should be in Y,N",
     ],
   },
 }
