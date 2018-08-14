@@ -1,4 +1,5 @@
 import { StringsValue } from '../../types';
+import { ECastType, ERule } from '../../Validator';
 import { IConfig } from './types';
 
 const rules: StringsValue<IConfig> = {
@@ -6,18 +7,18 @@ const rules: StringsValue<IConfig> = {
     database: 'string',
     host: 'required_with:db|string',
     password: 'string',
-    port: 'integer|cast:number',
+    port: `integer|${ERule.Cast}:${ECastType.Number}`,
     replication: {
       read: [{
         host: 'string',
         password: 'string',
-        port: 'integer|cast:number',
+        port: `integer|${ERule.Cast}:${ECastType.Number}`,
         username: 'string',
       }],
       write: {
         host: 'string',
         password: 'string',
-        port: 'number|cast:number',
+        port: `number|${ERule.Cast}:${ECastType.Number}`,
         username: 'string',
       },
     },
@@ -25,7 +26,7 @@ const rules: StringsValue<IConfig> = {
   },
   features: {
     featureName: {
-      enabled: 'bool|cast:boolean,false',
+      enabled: `${ERule.Bool}|${ERule.Cast}:${ECastType.Boolean},false`,
       key: 'required|string',
     },
   },
@@ -53,7 +54,7 @@ const rules: StringsValue<IConfig> = {
     sentinels: [{
       host: 'string',
       port: 'integer',
-      test: 'required|bool|cast:boolean,false',
+      test: `required|${ERule.Bool}|${ERule.Cast}:${ECastType.Boolean},false`,
     }],
   },
 };

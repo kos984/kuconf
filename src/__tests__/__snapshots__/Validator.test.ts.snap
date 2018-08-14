@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Validator rule: bool 1`] = `
+exports[`Validator rule: kuConfBool 1`] = `
 Errors {
   "errors": Object {
     "arr.4": Array [
@@ -16,26 +16,27 @@ Errors {
 }
 `;
 
-exports[`Validator rule: cast 1`] = `
+exports[`Validator rule: kuConfCast 1`] = `
 Errors {
   "errors": Object {},
 }
 `;
 
-exports[`Validator rule: cast 2`] = `
+exports[`Validator rule: kuConfCast 2`] = `
 Object {
   "bool": true,
   "boolDefaultFalse": false,
   "boolDefaultTrue": true,
   "date": 1999-12-31T00:00:00.000Z,
   "dateTimeDefault": 1999-12-31T00:00:00.000Z,
+  "nullDate": null,
   "number": 100,
   "numberDefault": 100,
   "stringDefault": "default",
 }
 `;
 
-exports[`Validator rule: objectKeysIn 1`] = `
+exports[`Validator rule: kuConfObjectKeysIn 1`] = `
 Errors {
   "errors": Object {
     "arr.2": Array [

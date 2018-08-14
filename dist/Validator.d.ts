@@ -14,12 +14,12 @@ export declare enum ERule {
     Max = "max",
     Integer = "integer",
     /** value should be strict equals 'true' or 'false' */
-    Bool = "bool",
+    Bool = "kuConfBool",
     /**
      * object should have properties only in listed values;
      * objectKeysIn:Y,N will check attrs: {a: 'Y', b: 'N'}
      */
-    ObjectKeysIn = "objectKeysIn",
+    ObjectKeysIn = "kuConfObjectKeysIn",
     /**
      * cast:ECastType,defaultValue
      *
@@ -29,6 +29,6 @@ export declare enum ERule {
      *
      * @description should be last rule in the list, will not update inputValue
      */
-    Cast = "cast"
+    Cast = "kuConfCast"
 }
 export default Validator;

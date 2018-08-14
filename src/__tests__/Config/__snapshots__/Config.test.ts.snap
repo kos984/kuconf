@@ -267,7 +267,7 @@ Object {
       "name": "integer",
     },
     Object {
-      "name": "cast",
+      "name": "kuConfCast",
       "value": "number",
     },
   ],
@@ -286,7 +286,7 @@ Object {
       "name": "integer",
     },
     Object {
-      "name": "cast",
+      "name": "kuConfCast",
       "value": "number",
     },
   ],
@@ -310,7 +310,7 @@ Object {
       "name": "integer",
     },
     Object {
-      "name": "cast",
+      "name": "kuConfCast",
       "value": "number",
     },
   ],
@@ -334,7 +334,7 @@ Object {
       "name": "number",
     },
     Object {
-      "name": "cast",
+      "name": "kuConfCast",
       "value": "number",
     },
   ],
@@ -350,10 +350,10 @@ Object {
   ],
   "features.featurename.enabled": Array [
     Object {
-      "name": "bool",
+      "name": "kuConfBool",
     },
     Object {
-      "name": "cast",
+      "name": "kuConfCast",
       "value": "boolean,false",
     },
   ],
@@ -450,10 +450,10 @@ Object {
       "name": "required",
     },
     Object {
-      "name": "bool",
+      "name": "kuConfBool",
     },
     Object {
-      "name": "cast",
+      "name": "kuConfCast",
       "value": "boolean,false",
     },
   ],
@@ -472,10 +472,10 @@ Object {
       "name": "required",
     },
     Object {
-      "name": "bool",
+      "name": "kuConfBool",
     },
     Object {
-      "name": "cast",
+      "name": "kuConfCast",
       "value": "boolean,false",
     },
   ],

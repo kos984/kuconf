@@ -28,15 +28,17 @@ describe('Validator', () => {
   });
 
   it(`rule: ${ERule.Cast}`, () => {
-    const payload = {
+    const payload: any = {
       bool: 'true',
       date: '1999-12-31',
+      nullDate: null,
       number: '100',
     };
     const validator = new Validator(payload, {
       // should cast if value exists
       bool: `${ERule.Bool}|${ERule.Cast}:${ECastType.Boolean}`,
       date: `${ERule.Date}|${ERule.Cast}:${ECastType.Date}`,
+      nullDate: `${ERule.Cast}:${ECastType.Date}`, // should be null
       number: `${ERule.Numeric}|${ERule.Cast}:${ECastType.Number}`,
 
       // should set default property if value not exists
