@@ -1,6 +1,6 @@
 {
   "name": "kuconf",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "nodejs node js case insensitive config",
   "main": "dist/index.js",
   "repository": {

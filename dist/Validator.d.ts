@@ -24,11 +24,14 @@ export declare enum ERule {
      * cast:ECastType,defaultValue
      *
      * @example
-     * const rules = { '*.age': 'numeric|cast:number,10' };
+     * const rules = { '*.age': `numeric|${ERule.Cast}:${ECastType.Number},10` };
      * const data = [{ age: '4' }, { name: 'test' }, { age: 5 }];
      *
      * @description should be last rule in the list, will not update inputValue
      */
     Cast = "kuConfCast"
 }
+export declare const castHandlers: {
+    [key: string]: any;
+};
 export default Validator;

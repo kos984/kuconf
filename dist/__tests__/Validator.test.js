@@ -26,27 +26,36 @@ describe('Validator', () => {
         expect(validator.errors).toMatchSnapshot();
     });
     it(`rule: ${Validator_1.ERule.Cast}`, () => {
+        Validator_1.castHandlers.json = (value) => {
+            // cast only strings
+            return JSON.parse(value);
+        };
         const payload = {
             bool: 'true',
             date: '1999-12-31',
+            json: '{"a": 5}',
+            nullDate: null,
             number: '100',
         };
         const validator = new Validator_1.default(payload, {
             // should cast if value exists
-            bool: `${Validator_1.ERule.Bool}|${Validator_1.ERule.Cast}:${Validator_1.ECastType.Boolean}`,
-            date: `${Validator_1.ERule.Date}|${Validator_1.ERule.Cast}:${Validator_1.ECastType.Date}`,
-            number: `${Validator_1.ERule.Numeric}|${Validator_1.ERule.Cast}:${Validator_1.ECastType.Number}`,
+            'bool': `${Validator_1.ERule.Bool}|${Validator_1.ERule.Cast}:${Validator_1.ECastType.Boolean}`,
+            'date': `${Validator_1.ERule.Date}|${Validator_1.ERule.Cast}:${Validator_1.ECastType.Date}`,
+            'json': `${Validator_1.ERule.Cast}:json`,
+            'json.a': `required|in:5`,
+            'nullDate': `${Validator_1.ERule.Cast}:${Validator_1.ECastType.Date}`,
+            'number': `${Validator_1.ERule.Numeric}|${Validator_1.ERule.Cast}:${Validator_1.ECastType.Number}`,
             // should set default property if value not exists
-            boolDefaultFalse: `${Validator_1.ERule.Bool}|${Validator_1.ERule.Cast}:${Validator_1.ECastType.Boolean},false`,
-            boolDefaultTrue: `${Validator_1.ERule.Bool}|${Validator_1.ERule.Cast}:${Validator_1.ECastType.Boolean},true`,
-            dateDefault: `${Validator_1.ERule.Date}|${Validator_1.ERule.Cast}:${Validator_1.ECastType.Date}:1999-12-31`,
-            dateTimeDefault: `${Validator_1.ERule.Cast}:${Validator_1.ECastType.Date},1999-12-31T00:00:00`,
-            numberDefault: `${Validator_1.ERule.Numeric}|${Validator_1.ERule.Cast}:${Validator_1.ECastType.Number},100`,
-            stringDefault: `${Validator_1.ERule.String}|${Validator_1.ERule.Cast}:${Validator_1.ECastType.String},default\,String`,
+            'boolDefaultFalse': `${Validator_1.ERule.Bool}|${Validator_1.ERule.Cast}:${Validator_1.ECastType.Boolean},false`,
+            'boolDefaultTrue': `${Validator_1.ERule.Bool}|${Validator_1.ERule.Cast}:${Validator_1.ECastType.Boolean},true`,
+            'dateDefault': `${Validator_1.ERule.Date}|${Validator_1.ERule.Cast}:${Validator_1.ECastType.Date}:1999-12-31`,
+            'dateTimeDefault': `${Validator_1.ERule.Cast}:${Validator_1.ECastType.Date},1999-12-31T00:00:00`,
+            'numberDefault': `${Validator_1.ERule.Numeric}|${Validator_1.ERule.Cast}:${Validator_1.ECastType.Number},100`,
+            'stringDefault': `${Validator_1.ERule.String}|${Validator_1.ERule.Cast}:${Validator_1.ECastType.String},default\,String`,
             // should not set if property not exists
-            boolEmpty: `${Validator_1.ERule.Bool}|${Validator_1.ERule.Cast}:${Validator_1.ECastType.Boolean}`,
-            dateEmpty: `${Validator_1.ERule.Date}|${Validator_1.ERule.Cast}:${Validator_1.ECastType.Date}`,
-            numberEmpty: `${Validator_1.ERule.Numeric}|${Validator_1.ERule.Cast}:${Validator_1.ECastType.Number}`,
+            'boolEmpty': `${Validator_1.ERule.Bool}|${Validator_1.ERule.Cast}:${Validator_1.ECastType.Boolean}`,
+            'dateEmpty': `${Validator_1.ERule.Date}|${Validator_1.ERule.Cast}:${Validator_1.ECastType.Date}`,
+            'numberEmpty': `${Validator_1.ERule.Numeric}|${Validator_1.ERule.Cast}:${Validator_1.ECastType.Number}`,
         });
         validator.fails();
         expect(validator.errors).toMatchSnapshot();

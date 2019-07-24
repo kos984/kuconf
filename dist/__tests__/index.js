@@ -4,6 +4,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const _ = require("lodash");
 const Config_1 = require("../Config");
 const EnvParser_1 = require("../parsers/EnvParser");
+const Validator_1 = require("../Validator");
 // db
 process.env.TEST__DB__USERNAME = 'username';
 process.env.TEST__DB__PASSWORD = 'password';
@@ -62,7 +63,7 @@ const conf = new Config_1.default((new EnvParser_1.default({
                 sentinels: {
                     '*.host': 'string',
                     '*.port': 'integer',
-                    '*.test': 'required|bool|cast:boolean,false',
+                    '*.test': `required|${Validator_1.ERule.Bool}|${Validator_1.ERule.Cast}:${Validator_1.ECastType.Boolean},false`,
                 },
             },
         },

@@ -1,22 +1,23 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const Validator_1 = require("../../Validator");
 const rules = {
     db: {
         database: 'string',
         host: 'required_with:db|string',
         password: 'string',
-        port: 'integer|cast:number',
+        port: `integer|${Validator_1.ERule.Cast}:${Validator_1.ECastType.Number}`,
         replication: {
             read: [{
                     host: 'string',
                     password: 'string',
-                    port: 'integer|cast:number',
+                    port: `integer|${Validator_1.ERule.Cast}:${Validator_1.ECastType.Number}`,
                     username: 'string',
                 }],
             write: {
                 host: 'string',
                 password: 'string',
-                port: 'number|cast:number',
+                port: `number|${Validator_1.ERule.Cast}:${Validator_1.ECastType.Number}`,
                 username: 'string',
             },
         },
@@ -24,7 +25,7 @@ const rules = {
     },
     features: {
         featureName: {
-            enabled: 'bool|cast:boolean,false',
+            enabled: `${Validator_1.ERule.Bool}|${Validator_1.ERule.Cast}:${Validator_1.ECastType.Boolean},false`,
             key: 'required|string',
         },
     },
@@ -52,7 +53,7 @@ const rules = {
         sentinels: [{
                 host: 'string',
                 port: 'integer',
-                test: 'required|bool|cast:boolean,false',
+                test: `required|${Validator_1.ERule.Bool}|${Validator_1.ERule.Cast}:${Validator_1.ECastType.Boolean},false`,
             }],
     },
 };

@@ -17,6 +17,7 @@ export default class Config<ConfigSchema> {
     get(path: string, defaultValue?: any): any;
     getConfig(): ConfigSchema;
     validate(confPart?: any): this;
+    toObject(confPart?: any): any;
     getValidationErrors(path?: string): any;
     protected initValidator(): void;
     protected objectToLower(obj: any, result?: any): any;

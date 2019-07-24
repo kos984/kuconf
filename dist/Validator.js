@@ -30,7 +30,7 @@ var ERule;
      * cast:ECastType,defaultValue
      *
      * @example
-     * const rules = { '*.age': 'numeric|cast:number,10' };
+     * const rules = { '*.age': `numeric|${ERule.Cast}:${ECastType.Number},10` };
      * const data = [{ age: '4' }, { name: 'test' }, { age: 5 }];
      *
      * @description should be last rule in the list, will not update inputValue
@@ -50,7 +50,7 @@ Validator.register(ERule.ObjectKeysIn, function (value, params, attribute) {
         }
     }
     return true;
-}, 'The :attribute keys should be in :objectKeysIn');
+}, `The :attribute keys should be in :${ERule.ObjectKeysIn}`);
 /** should be last rule in a queue, will not update inputValue */
 Validator.registerImplicit(ERule.Cast, function (value, input, path) {
     const source = this.validator.input;
@@ -67,26 +67,12 @@ Validator.registerImplicit(ERule.Cast, function (value, input, path) {
         // cast string only
         return true;
     }
-    switch (type) {
-        case ECastType.Number: {
-            value = typeof value === 'number' ? value : Number(value);
-            break;
-        }
-        case ECastType.Boolean: {
-            value = typeof value === 'boolean' ? value : value === 'true';
-            break;
-        }
-        case ECastType.Date: {
-            value = new Date(value);
-            break;
-        }
-        case ECastType.String: {
-            value = value.toString();
-            break;
-        }
-        default: {
-            return false;
-        }
+    if (typeof value !== 'string') {
+        // no need cast if value is not string
+        return true;
+    }
+    if (exports.castHandlers[type]) {
+        value = exports.castHandlers[type](value);
     }
     _.set(source, path, value);
     return true;
@@ -94,9 +80,23 @@ Validator.registerImplicit(ERule.Cast, function (value, input, path) {
 // test cast
 {
     const data = [{ age: '4' }, { name: 'test' }, { age: 5 }];
-    const rules = { '*.age': 'numeric|cast:number' };
+    const rules = { '*.age': `numeric|${ERule.Cast}:${ECastType.Number}` };
     const validation = new Validator(data, rules);
     validation.passes(); // true
     assert.deepEqual(data, [{ age: 4 }, { name: 'test' }, { age: 5 }], 'Validator, cast rule is not works correctly');
 }
+exports.castHandlers = {
+    [ECastType.Number]: (value) => {
+        return Number(value);
+    },
+    [ECastType.Boolean]: (value) => {
+        return value === 'true';
+    },
+    [ECastType.Date]: (value) => {
+        return new Date(value);
+    },
+    [ECastType.String]: (value) => {
+        return value.toString();
+    },
+};
 exports.default = Validator;

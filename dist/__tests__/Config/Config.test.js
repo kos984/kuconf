@@ -7,6 +7,16 @@ const EnvParser_1 = require("../../parsers/EnvParser");
 const validationRules_1 = require("./validationRules");
 const prefix = 'TEST__';
 describe('Config [default settings]', () => {
+    describe('toObject test', () => {
+        it('toObject', () => {
+            const envParser = new EnvParser_1.default({ prefix });
+            const conf = new Config_1.default(envParser.get(), {
+                caseSensitive: false,
+            });
+            const config = conf.getConfig();
+            expect(conf.toObject(config.db)).toMatchSnapshot();
+        });
+    });
     describe('[options] caseSensitive', () => {
         it('config should be case-insensitive', () => {
             const envParser = new EnvParser_1.default({ prefix });

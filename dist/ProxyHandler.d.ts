@@ -2,6 +2,7 @@ import Config from './Config';
 import { IProxyHandlerOptions } from './types';
 export declare const validate: unique symbol;
 export declare const rulesPath: unique symbol;
+export declare const toObject: unique symbol;
 export default class ProxyHandler {
     protected config: Config<any>;
     protected proxy: symbol;
@@ -14,5 +15,6 @@ export default class ProxyHandler {
     constructor(config: Config<any>, options: IProxyHandlerOptions);
     get(target: any, name: any): any;
     getOwnPropertyDescriptor(target: any, name: string | any): PropertyDescriptor;
+    protected [toObject](target: any): any;
     protected [validate](target: any): () => any;
 }

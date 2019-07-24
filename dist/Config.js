@@ -56,6 +56,9 @@ class Config {
         }
         return this;
     }
+    toObject(confPart) {
+        return confPart[ProxyHandler_1.toObject]();
+    }
     getValidationErrors(path) {
         this.initValidator();
         if (!this.validation.errors) {
