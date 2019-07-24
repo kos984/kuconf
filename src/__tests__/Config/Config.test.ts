@@ -10,6 +10,17 @@ const prefix = 'TEST__';
 
 describe('Config [default settings]', () => {
 
+  describe('toObject test', () => {
+    it('toObject', () => {
+      const envParser = new EnvParser({ prefix });
+      const conf = new Config<IConfig>(envParser.get(), {
+        caseSensitive: false,
+      });
+      const config = conf.getConfig();
+      expect(conf.toObject(config.db)).toMatchSnapshot();
+    });
+  });
+
   describe('[options] caseSensitive', () => {
     it('config should be case-insensitive', () => {
       const envParser = new EnvParser({ prefix });

@@ -76,26 +76,12 @@ Validator.register(
       // cast string only
       return true;
     }
-    switch (type) {
-      case ECastType.Number: {
-        value = typeof value === 'number' ? value : Number(value);
-        break;
-      }
-      case ECastType.Boolean: {
-        value = typeof value === 'boolean' ? value : value === 'true';
-        break;
-      }
-      case ECastType.Date: {
-        value = new Date(value);
-        break;
-      }
-      case ECastType.String: {
-        value = value.toString();
-        break;
-      }
-      default: {
-        return false;
-      }
+    if (typeof value !== 'string') {
+      // no need cast if value is not string
+      return true;
+    }
+    if (castHandlers[type]) {
+      value = castHandlers[type](value);
     }
     _.set(source, path, value);
     return true;
@@ -111,5 +97,20 @@ Validator.register(
   validation.passes(); // true
   assert.deepEqual(data, [{ age: 4 }, { name: 'test' }, { age: 5 }], 'Validator, cast rule is not works correctly');
 }
+
+export const castHandlers: { [key: string]: any } = {
+  [ECastType.Number]: (value: string): number => {
+    return Number(value);
+  },
+  [ECastType.Boolean]: (value: string): boolean => {
+    return value === 'true';
+  },
+  [ECastType.Date]: (value: string): Date => {
+    return new Date(value);
+  },
+  [ECastType.String]: (value: string) => {
+    return value.toString();
+  },
+};
 
 export default Validator;

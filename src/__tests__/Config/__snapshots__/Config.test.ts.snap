@@ -497,3 +497,32 @@ exports[`Config [default settings] [options] validation validation redis should 
 exports[`Config [default settings] [options] validation validation redis.host should throw error 1`] = `"only objects allowed for validation"`;
 
 exports[`Config [default settings] [options] validation validation redis.sentinels[0] should throw error 1`] = `"{\\"errors\\":{\\"redis.sentinels.0.test\\":[\\"The redis.sentinels.0.test must be a true or false\\"]}}"`;
+
+exports[`Config [default settings] toObject test toObject 1`] = `
+Object {
+  "database": "test",
+  "host": "localhost",
+  "password": "password",
+  "port": "3306",
+  "replication": Object {
+    "read": Array [
+      Object {
+        "host": "read0.example.com",
+        "password": "password_read_0",
+        "username": "username_read_0",
+      },
+      Object {
+        "host": "read1.example.com",
+        "password": "password_read_1",
+        "username": "username_read_1",
+      },
+    ],
+    "write": Object {
+      "host": "write.example.com",
+      "password": "password_write",
+      "username": "username_write",
+    },
+  },
+  "username": "username",
+}
+`;

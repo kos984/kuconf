@@ -1,5 +1,5 @@
 import * as _ from 'lodash';
-import ProxyHandler, { validate as partialValidate } from './ProxyHandler';
+import ProxyHandler, { toObject, validate as partialValidate } from './ProxyHandler';
 import { IConfigOptions, ILogger } from './types';
 import Validator from './Validator';
 
@@ -71,6 +71,10 @@ export default class Config<ConfigSchema> {
       throw new Error(JSON.stringify(errors));
     }
     return this;
+  }
+
+  public toObject(confPart?: any) {
+    return confPart[toObject]();
   }
 
   public getValidationErrors(path?: string) {
