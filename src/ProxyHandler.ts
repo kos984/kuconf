@@ -3,6 +3,7 @@ import { IProxyHandlerOptions } from './types';
 
 export const validate = Symbol('validate'); // move to Config constructor ?
 export const rulesPath = Symbol('rulesPath');
+export const toObject = Symbol('toObject');
 
 export default class ProxyHandler {
 
@@ -21,6 +22,9 @@ export default class ProxyHandler {
   public get(target: any, name: any) {
     if (name === validate) {
       return this[validate](target);
+    }
+    if (name === toObject) {
+      return () => this[toObject](target);
     }
     if (typeof name !== 'string') {
       return target[name];
@@ -45,6 +49,10 @@ export default class ProxyHandler {
   public getOwnPropertyDescriptor(target: any, name: string | any) {
     const path = typeof name === 'string' && this.options.caseSensitive ? name.toLowerCase() : name;
     return Object.getOwnPropertyDescriptor(target, path);
+  }
+
+  protected [toObject](target: any) {
+    return target;
   }
 
   protected [validate](target: any) {
