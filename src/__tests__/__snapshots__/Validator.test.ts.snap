@@ -29,6 +29,9 @@ Object {
   "boolDefaultTrue": true,
   "date": 1999-12-31T00:00:00.000Z,
   "dateTimeDefault": 1999-12-31T00:00:00.000Z,
+  "json": Object {
+    "a": 5,
+  },
   "nullDate": null,
   "number": 100,
   "numberDefault": 100,
