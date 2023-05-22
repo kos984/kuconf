@@ -20,7 +20,7 @@
   "license": "MIT",
   "dependencies": {
     "lodash": "^4.17.15",
-    "validatorjs": "^3.15.1"
+    "validatorjs": "^3.22.1"
   },
   "devDependencies": {
     "@types/jest": "^23.1.0",
